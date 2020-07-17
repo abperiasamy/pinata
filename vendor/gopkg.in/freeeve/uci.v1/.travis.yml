@@ -1,0 +1,21 @@
+language: go
+go: 
+  - 1.2
+  
+before_script:
+  - go get launchpad.net/gocheck
+  - wget https://s3.amazonaws.com/stockfish/stockfish-dd-src.zip
+  - unzip stockfish-dd-src.zip
+  - cd stockfish-dd-src/src
+  - make build ARCH=x86-64
+  - cp stockfish ../..
+  - cd ../..
+
+before_install:
+  - go get code.google.com/p/go.tools/cmd/cover
+  
+script:
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - export PATH=$PATH:$HOME/gopath/bin/
+  - goveralls -repotoken iDcWiqj8EELzhlCi1xr0wazaGYHLFHp1a
