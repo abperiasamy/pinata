@@ -20,7 +20,7 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/freeeve/uci.v1"
+	uci "github.com/abperiasamy/blindfold/pkg/uci"
 	"log"
 )
 
