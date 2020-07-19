@@ -18,14 +18,35 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"strconv"
+	"strings"
 
 	"github.com/abperiasamy/blindfold/pkg/uci"
+	"github.com/chzyer/readline"
 )
+
+var completer = readline.NewPrefixCompleter(
+	readline.PcItem("mode",
+		readline.PcItem("vi"),
+		readline.PcItem("emacs"),
+	),
+	readline.PcItem("bye"),
+)
+
+func filterInput(r rune) (rune, bool) {
+	switch r {
+	// block CtrlZ feature
+	case readline.CharCtrlZ:
+		return r, false
+	}
+	return r, true
+}
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Cavefish() {
+func Shell() {
 	eng, err := uci.NewEngine("/usr/games/stockfish")
 	if err != nil {
 		log.Fatal(err)
@@ -48,4 +69,47 @@ func Cavefish() {
 
 	// print it (String() goes to pretty JSON for now)
 	fmt.Println(results)
+
+	l, err := readline.NewEx(&readline.Config{
+		Prompt:          "\033[31m»\033[0m ",
+		HistoryFile:     "/tmp/readline.tmp",
+		AutoComplete:    completer,
+		InterruptPrompt: "^C",
+		EOFPrompt:       "quit",
+
+		HistorySearchFold:   true,
+		FuncFilterInputRune: filterInput,
+	})
+	if err != nil {
+		panic(err)
+	}
+	defer l.Close()
+
+	for {
+		line, err := l.Readline()
+		if err == readline.ErrInterrupt {
+			if len(line) == 0 {
+				break
+			} else {
+				continue
+			}
+		} else if err == io.EOF {
+			break
+		}
+
+		line = strings.TrimSpace(line)
+		switch {
+		case line == "mode":
+			if l.IsVimMode() {
+				println("current mode: vim")
+			} else {
+				println("current mode: emacs")
+			}
+		case line == "bye":
+			goto exit
+		default:
+			log.Println("you said:", strconv.Quote(line))
+		}
+	}
+exit:
 }
