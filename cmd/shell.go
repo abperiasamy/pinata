@@ -17,22 +17,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/abperiasamy/blindfold/pkg/uci"
 	"github.com/chzyer/readline"
 )
 
 var completer = readline.NewPrefixCompleter(
-	readline.PcItem("mode",
+	readline.PcItem("/keys",
 		readline.PcItem("vi"),
 		readline.PcItem("emacs"),
 	),
-	readline.PcItem("bye"),
+	readline.PcItem("/quit"),
 )
 
 func filterInput(r rune) (rune, bool) {
@@ -47,35 +45,19 @@ func filterInput(r rune) (rune, bool) {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Shell() {
-	eng, err := uci.NewEngine("/usr/games/stockfish")
+	eng, err := InitUCI("/usr/games/stockfish")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// set some engine options
-	eng.SetOptions(uci.Options{
-		Hash:    128,
-		Ponder:  false,
-		OwnBook: true,
-		MultiPV: 4,
-	})
-
-	// set the starting position
-	eng.SetFEN("rnb4r/ppp1k1pp/3bp3/1N3p2/1P2n3/P3BN2/2P1PPPP/R3KB1R b KQ - 4 11")
-
-	// set some result filter options
-	resultOpts := uci.HighestDepthOnly | uci.IncludeUpperbounds | uci.IncludeLowerbounds
-	results, _ := eng.GoDepth(10, resultOpts)
-
-	// print it (String() goes to pretty JSON for now)
-	fmt.Println(results)
+	defer eng.Close()
 
 	l, err := readline.NewEx(&readline.Config{
 		Prompt:          "\033[31m»\033[0m ",
 		HistoryFile:     "/tmp/readline.tmp",
 		AutoComplete:    completer,
 		InterruptPrompt: "^C",
-		EOFPrompt:       "quit",
+		EOFPrompt:       "/bye",
 
 		HistorySearchFold:   true,
 		FuncFilterInputRune: filterInput,
@@ -98,14 +80,26 @@ func Shell() {
 		}
 
 		line = strings.TrimSpace(line)
+
 		switch {
-		case line == "mode":
+		case line == "":
+		case strings.HasPrefix(line, "/keys "):
+			mode := line[6:]
+			switch mode {
+			case "vi":
+				l.SetVimMode(true)
+			case "emacs":
+				l.SetVimMode(false)
+			default:
+				println("invalid mode:", mode)
+			}
+		case line == "/keys":
 			if l.IsVimMode() {
 				println("current mode: vim")
 			} else {
 				println("current mode: emacs")
 			}
-		case line == "bye":
+		case line == "/quit":
 			goto exit
 		default:
 			log.Println("you said:", strconv.Quote(line))
