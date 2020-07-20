@@ -17,8 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	// "github.com/abperiasamy/blindfold/pkg/uci"
-
 	"log"
 
 	"github.com/andrewbackes/chess/engines"

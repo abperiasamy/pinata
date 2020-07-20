@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package main
 
-import "github.com/abperiasamy/blindfold/cmd"
+import "github.com/abperiasamy/pinata/cmd"
 
 func main() {
 	cmd.Execute()
