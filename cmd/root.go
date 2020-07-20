@@ -31,18 +31,22 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "pinata",
-	Short: "Blindfold chess front-end for UCI compatible engines",
-	Long:  `A command-line front-end to play blindfold chess against Stockfish and other UCI compatible chess engines.`,
+	Short: "Play blindfold chess against UCI compatible engines.",
+	Long:  ``,
 
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	// Transfer control to readline shell.
+	Run: func(cmd *cobra.Command, args []string) {
+		Shell()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	Shell()
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func init() {
@@ -57,6 +61,7 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }
 
 // initConfig reads in config file and ENV variables if set.
