@@ -1,2 +1,2 @@
-# blindfold
+# pinata
 Shell for blindfold chess
