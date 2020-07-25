@@ -19,19 +19,18 @@ package cmd
 import (
 	"log"
 
-	"github.com/andrewbackes/chess/engines"
+	"github.com/dolegi/uci"
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func InitUCI(enginePath string) (*engines.UCIEngine, error) {
-
-	engine, err := engines.NewUCIEngine(enginePath)
+func InitUCI(enginePath string) (*uci.Engine, error) {
+	eng, err := uci.NewEngine(enginePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return engine, err
+	return eng, err
 
 	/*
 		eng, err := uci.NewEngine("/usr/games/stockfish")

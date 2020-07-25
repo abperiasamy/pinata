@@ -17,12 +17,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
 	"io"
 	"log"
-	"strconv"
 	"strings"
 
+	"github.com/andrewbackes/chess/game"
 	"github.com/chzyer/readline"
+	"github.com/dolegi/uci"
 )
 
 var completer = readline.NewPrefixCompleter(
@@ -30,7 +32,9 @@ var completer = readline.NewPrefixCompleter(
 		readline.PcItem("vi"),
 		readline.PcItem("emacs"),
 	),
+
 	readline.PcItem("/quit"),
+	readline.PcItem("/new"),
 )
 
 func filterInput(r rune) (rune, bool) {
@@ -49,15 +53,29 @@ func Shell() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer eng.Quit()
 
-	defer eng.Close()
+	eng.SetOption("Ponder", false)
+	eng.SetOption("Threads", "8")
+
+	eng.NewGame(uci.NewGameOpts{
+		InitialFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+		Side:       uci.White,
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	g := game.New()
+	fmt.Println(g)
 
 	l, err := readline.NewEx(&readline.Config{
 		Prompt:          "\033[31m»\033[0m ",
 		HistoryFile:     "/tmp/readline.tmp",
 		AutoComplete:    completer,
 		InterruptPrompt: "^C",
-		EOFPrompt:       "/bye",
+		EOFPrompt:       "/quit",
 
 		HistorySearchFold:   true,
 		FuncFilterInputRune: filterInput,
@@ -102,7 +120,25 @@ func Shell() {
 		case line == "/quit":
 			goto exit
 		default:
-			log.Println("you said:", strconv.Quote(line))
+			move, err := g.Position().ParseMove(line)
+			if err != nil {
+				log.Println(err)
+			}
+
+			g.MakeMove(move)
+
+			eng.Position(move.String())
+
+			resp := eng.Go(uci.GoOpts{MoveTime: 100})
+
+			move, err = g.Position().ParseMove(resp.Bestmove)
+			if err != nil {
+				log.Println(err)
+			}
+
+			g.MakeMove(move)
+			fmt.Println(g)
+
 		}
 	}
 exit:

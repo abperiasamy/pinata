@@ -1,13 +1,10 @@
 # github.com/andrewbackes/chess v0.0.0-20171122002438-368c396b5300
 ## explicit
-github.com/andrewbackes/chess/engines
-github.com/andrewbackes/chess/fen
 github.com/andrewbackes/chess/game
 github.com/andrewbackes/chess/piece
 github.com/andrewbackes/chess/position
 github.com/andrewbackes/chess/position/board
 github.com/andrewbackes/chess/position/move
-github.com/andrewbackes/chess/position/reader
 github.com/andrewbackes/chess/position/square
 # github.com/chzyer/logex v1.1.10
 ## explicit
@@ -16,6 +13,9 @@ github.com/andrewbackes/chess/position/square
 github.com/chzyer/readline
 # github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1
 ## explicit
+# github.com/dolegi/uci v0.0.0-20200615095626-a4c7c119bc41
+## explicit
+github.com/dolegi/uci
 # github.com/fsnotify/fsnotify v1.4.9
 ## explicit
 github.com/fsnotify/fsnotify
