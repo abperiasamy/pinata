@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/andrewbackes/chess/game"
+	"github.com/andrewbackes/chess/position/move"
 	"github.com/chzyer/readline"
 	"github.com/dolegi/uci"
 )
@@ -59,20 +60,18 @@ func Shell() {
 	eng.SetOption("Threads", "8")
 
 	eng.NewGame(uci.NewGameOpts{
-		InitialFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
-		Side:       uci.White,
+		//	InitialFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", //
+		Side: uci.White,
 	})
-
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	g := game.New()
 	fmt.Println(g)
 
+	movesStr := ""
+
 	l, err := readline.NewEx(&readline.Config{
-		Prompt:          "\033[31m»\033[0m ",
-		HistoryFile:     "/tmp/readline.tmp",
+		Prompt: "\033[31m»\033[0m ",
+		// HistoryFile:     "/tmp/readline.tmp",
 		AutoComplete:    completer,
 		InterruptPrompt: "^C",
 		EOFPrompt:       "/quit",
@@ -120,25 +119,38 @@ func Shell() {
 		case line == "/quit":
 			goto exit
 		default:
-			move, err := g.Position().ParseMove(line)
+			m, err := g.Position().ParseMove(line)
 			if err != nil {
-				log.Println(err)
+				fmt.Println(err)
+				break
 			}
 
-			g.MakeMove(move)
-
-			eng.Position(move.String())
-
-			resp := eng.Go(uci.GoOpts{MoveTime: 100})
-
-			move, err = g.Position().ParseMove(resp.Bestmove)
+			_, err = g.MakeMove(m)
 			if err != nil {
-				log.Println(err)
+				fmt.Println(err)
+				break
 			}
 
-			g.MakeMove(move)
+			movesStr += m.String() + " "
+			/*
+				moves := ""
+				if len(g.Positions) > 0 {
+					for _, pos := range g.Positions {
+						if pos.LastMove != move.Null {
+							moves += pos.LastMove.String() + " "
+						}
+					}
+				}
+			*/
+
+			eng.Position(movesStr)
+			resp := eng.Go(uci.GoOpts{MoveTime: 500})
+
+			g.MakeMove(move.Parse(resp.Bestmove))
+			movesStr += resp.Bestmove + " "
+
 			fmt.Println(g)
-
+			fmt.Println(move.Parse(resp.Bestmove).String())
 		}
 	}
 exit:
