@@ -1,11 +1,3 @@
-# github.com/andrewbackes/chess v0.0.0-20171122002438-368c396b5300
-## explicit
-github.com/andrewbackes/chess/game
-github.com/andrewbackes/chess/piece
-github.com/andrewbackes/chess/position
-github.com/andrewbackes/chess/position/board
-github.com/andrewbackes/chess/position/move
-github.com/andrewbackes/chess/position/square
 # github.com/chzyer/logex v1.1.10
 ## explicit
 # github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
@@ -13,9 +5,9 @@ github.com/andrewbackes/chess/position/square
 github.com/chzyer/readline
 # github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1
 ## explicit
-# github.com/dolegi/uci v0.0.0-20200615095626-a4c7c119bc41
+# github.com/freeeve/uci v0.0.0-20200629112257-2a3e349f2e55
 ## explicit
-github.com/dolegi/uci
+github.com/freeeve/uci
 # github.com/fsnotify/fsnotify v1.4.9
 ## explicit
 github.com/fsnotify/fsnotify
@@ -37,6 +29,9 @@ github.com/magiconair/properties
 # github.com/mitchellh/mapstructure v1.3.2
 ## explicit
 github.com/mitchellh/mapstructure
+# github.com/notnil/chess v1.2.0
+## explicit
+github.com/notnil/chess
 # github.com/pelletier/go-toml v1.8.0
 ## explicit
 github.com/pelletier/go-toml

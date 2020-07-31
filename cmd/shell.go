@@ -22,13 +22,13 @@ import (
 	"log"
 	"strings"
 
-	"github.com/andrewbackes/chess/game"
-	"github.com/andrewbackes/chess/position/move"
 	"github.com/chzyer/readline"
-	"github.com/dolegi/uci"
+	"github.com/freeeve/uci"
+	"github.com/notnil/chess"
 )
 
 var completer = readline.NewPrefixCompleter(
+	readline.PcItemDynamic(ValidMovesConstructor),
 	readline.PcItem("/keys",
 		readline.PcItem("vi"),
 		readline.PcItem("emacs"),
@@ -50,24 +50,21 @@ func filterInput(r rune) (rune, bool) {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Shell() {
-	eng, err := InitUCI("/usr/games/stockfish")
+	eng, err := NewEngine("/usr/games/stockfish")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer eng.Quit()
+	defer eng.Close()
 
-	eng.SetOption("Ponder", false)
-	eng.SetOption("Threads", "8")
+	/*
+		eng.SetOption("Ponder", false)
+		eng.SetOption("Threads", "8")
 
-	eng.NewGame(uci.NewGameOpts{
-		//	InitialFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", //
-		Side: uci.White,
-	})
-
-	g := game.New()
-	fmt.Println(g)
-
-	movesStr := ""
+			eng.NewGame(uci.NewGameOpts{
+			InitialFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+			// Side:       uci.Black,
+		})
+	*/
 
 	l, err := readline.NewEx(&readline.Config{
 		Prompt: "\033[31m»\033[0m ",
@@ -119,38 +116,36 @@ func Shell() {
 		case line == "/quit":
 			goto exit
 		default:
-			m, err := g.Position().ParseMove(line)
+			err := game.MoveStr(line)
 			if err != nil {
+				fmt.Println(game.Position().Board().Draw())
 				fmt.Println(err)
-				break
+				continue
+			}
+			eng.SetFEN(game.FEN())
+			results, err := eng.GoDepth(10, uci.HighestDepthOnly)
+			if err != nil {
+				fmt.Println(game.Position().Board().Draw())
+				fmt.Println(err)
+				continue
 			}
 
-			_, err = g.MakeMove(m)
+			moveSAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
 			if err != nil {
+				fmt.Println(game.Position().Board().Draw())
 				fmt.Println(err)
-				break
+				continue
 			}
 
-			movesStr += m.String() + " "
-			/*
-				moves := ""
-				if len(g.Positions) > 0 {
-					for _, pos := range g.Positions {
-						if pos.LastMove != move.Null {
-							moves += pos.LastMove.String() + " "
-						}
-					}
-				}
-			*/
+			fmt.Println("SAN: " + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
 
-			eng.Position(movesStr)
-			resp := eng.Go(uci.GoOpts{MoveTime: 500})
-
-			g.MakeMove(move.Parse(resp.Bestmove))
-			movesStr += resp.Bestmove + " "
-
-			fmt.Println(g)
-			fmt.Println(move.Parse(resp.Bestmove).String())
+			err = game.Move(moveSAN)
+			if err != nil {
+				fmt.Println(game.Position().Board().Draw())
+				fmt.Println(err)
+				continue
+			}
+			fmt.Println(game.Position().Board().Draw())
 		}
 	}
 exit:

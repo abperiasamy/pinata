@@ -19,16 +19,28 @@ package cmd
 import (
 	"log"
 
-	"github.com/dolegi/uci"
+	"github.com/freeeve/uci"
+	"github.com/notnil/chess"
 )
+
+var game = chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func InitUCI(enginePath string) (*uci.Engine, error) {
+func NewEngine(enginePath string) (*uci.Engine, error) {
 	eng, err := uci.NewEngine(enginePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	return eng, err
+}
+
+// Readline completion of all the valid moves left.
+func ValidMovesConstructor(string) (moves []string) {
+	for _, move := range game.Position().ValidMoves() {
+		moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
+		moves = append(moves, moveSAN)
+	}
+	return moves
 }
