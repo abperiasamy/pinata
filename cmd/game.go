@@ -23,8 +23,6 @@ import (
 	"github.com/notnil/chess"
 )
 
-var game = chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
-
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func NewEngine(enginePath string) (*uci.Engine, error) {
@@ -36,10 +34,19 @@ func NewEngine(enginePath string) (*uci.Engine, error) {
 	return eng, err
 }
 
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
+func playerColor() chess.Color {
+	if gPlayerColor == "white" {
+		return chess.White
+	}
+	return chess.Black
+}
+
 // Readline completion of all the valid moves left.
-func ValidMovesConstructor(string) (moves []string) {
-	for _, move := range game.Position().ValidMoves() {
-		moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
+func validMovesConstructor(string) (moves []string) {
+	for _, move := range gGame.Position().ValidMoves() {
+		moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
 		moves = append(moves, moveSAN)
 	}
 	return moves

@@ -25,13 +25,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "pinata",
-	Short: "Piñata - play blindfold chess against UCI compatible engines.",
-	Long:  ``,
+	Use:     "pinata",
+	Short:   "Piñata - play blindfold chess against UCI compatible engines.",
+	Version: "1.0aplha",
+	Long:    ``,
 
 	// Transfer control to readline shell.
 	Run: func(cmd *cobra.Command, args []string) {
@@ -48,6 +47,7 @@ func Execute() {
 	}
 }
 
+// Load config file and register flags.
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -55,19 +55,21 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "pinata.toml", "config file")
+	rootCmd.PersistentFlags().StringVarP(&gCfgFile, "config", "c", "pinata.toml", "config file")
+	rootCmd.PersistentFlags().StringVarP(&gEngineBinary, "engine", "e", "stockfish", "path to UCI compatible chess engine executable")
+	rootCmd.PersistentFlags().StringVarP(&gPlayerColor, "play", "p", "white", "choose player color")
+	rootCmd.PersistentFlags().BoolVarP(&gVisual, "visual", "v", false, "cheat blindfold")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
+	if gCfgFile != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
+		viper.SetConfigFile(gCfgFile)
 	} else {
 		/*
 			// Find home directory.
@@ -83,13 +85,8 @@ func initConfig() {
 		viper.AddConfigPath(".") // search in the current dir.
 
 		// Default to TOML format, though viper supports a variety of standard formats.
-		viper.SetConfigName("pinata.toml")
+		viper.SetConfigName(gCfgFile)
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
 }

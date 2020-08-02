@@ -24,18 +24,24 @@ import (
 
 	"github.com/chzyer/readline"
 	"github.com/freeeve/uci"
+	. "github.com/logrusorgru/aurora"
 	"github.com/notnil/chess"
 )
 
 var completer = readline.NewPrefixCompleter(
-	readline.PcItemDynamic(ValidMovesConstructor),
+	readline.PcItemDynamic(validMovesConstructor),
+	readline.PcItem("resign"),
+	readline.PcItem("/quit"),
+	readline.PcItem("/new"),
+
 	readline.PcItem("/keys",
 		readline.PcItem("vi"),
 		readline.PcItem("emacs"),
 	),
-
-	readline.PcItem("/quit"),
-	readline.PcItem("/new"),
+	readline.PcItem("/blind",
+		readline.PcItem("on"),
+		readline.PcItem("off"),
+	),
 )
 
 func filterInput(r rune) (rune, bool) {
@@ -50,7 +56,7 @@ func filterInput(r rune) (rune, bool) {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Shell() {
-	eng, err := NewEngine("/usr/games/stockfish")
+	eng, err := NewEngine(gEngineBinary)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,7 +73,7 @@ func Shell() {
 	*/
 
 	l, err := readline.NewEx(&readline.Config{
-		Prompt: "\033[31m»\033[0m ",
+		// Prompt: "\033[31m»\033[0m ",
 		// HistoryFile:     "/tmp/readline.tmp",
 		AutoComplete:    completer,
 		InterruptPrompt: "^C",
@@ -81,6 +87,9 @@ func Shell() {
 	}
 	defer l.Close()
 
+	blindMode := true
+
+	l.SetPrompt(gWhitePrompt)
 	for {
 		line, err := l.Readline()
 		if err == readline.ErrInterrupt {
@@ -94,9 +103,30 @@ func Shell() {
 		}
 
 		line = strings.TrimSpace(line)
-
 		switch {
 		case line == "":
+		case line == "resign":
+			gGame.Resign(chess.Black)
+			// fmt.Println(Outcome().String())
+			goto end
+
+		case strings.HasPrefix(line, "/blind"):
+			cmd := strings.SplitN(line, " ", 2)
+			if len(cmd) > 1 {
+				switch cmd[1] {
+				case "on":
+					blindMode = true
+				case "off":
+					blindMode = false
+				}
+			}
+
+			if blindMode {
+				fmt.Println("You are playing", Bold(Yellow("BLIND")))
+			} else {
+				fmt.Println("You are playing", Bold(Yellow("VISUAL")))
+			}
+
 		case strings.HasPrefix(line, "/keys "):
 			mode := line[6:]
 			switch mode {
@@ -114,39 +144,42 @@ func Shell() {
 				println("current mode: emacs")
 			}
 		case line == "/quit":
-			goto exit
+			goto end
 		default:
-			err := game.MoveStr(line)
+
+			err := gGame.MoveStr(line)
 			if err != nil {
-				fmt.Println(game.Position().Board().Draw())
-				fmt.Println(err)
+				fmt.Println("invalid move: " + line) //
+				//fmt.Println("Allowed Moves: "+gGame.ValidMoves())
 				continue
 			}
-			eng.SetFEN(game.FEN())
+			eng.SetFEN(gGame.FEN())
 			results, err := eng.GoDepth(10, uci.HighestDepthOnly)
 			if err != nil {
-				fmt.Println(game.Position().Board().Draw())
+				fmt.Println(gGame.Position().Board().Draw())
 				fmt.Println(err)
 				continue
 			}
 
-			moveSAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
+			moveSAN, err := chess.LongAlgebraicNotation{}.Decode(gGame.Position(), results.BestMove)
 			if err != nil {
-				fmt.Println(game.Position().Board().Draw())
+				fmt.Println("SANe " + gGame.Position().Board().Draw())
 				fmt.Println(err)
 				continue
 			}
 
-			fmt.Println("SAN: " + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
+			fmt.Println(gBlackPrompt + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
 
-			err = game.Move(moveSAN)
+			err = gGame.Move(moveSAN)
 			if err != nil {
-				fmt.Println(game.Position().Board().Draw())
+				fmt.Println(gGame.Position().Board().Draw())
 				fmt.Println(err)
 				continue
 			}
-			fmt.Println(game.Position().Board().Draw())
+			if !blindMode {
+				fmt.Println(gGame.Position().Board().Draw())
+			}
 		}
 	}
-exit:
+end:
 }

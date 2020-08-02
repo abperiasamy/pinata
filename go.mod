@@ -8,6 +8,8 @@ require (
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/freeeve/uci v0.0.0-20200629112257-2a3e349f2e55
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/logrusorgru/aurora v2.0.3+incompatible
+	github.com/logrusorgru/aurora/v3 v3.0.0 // indirect
 	github.com/mitchellh/mapstructure v1.3.2 // indirect
 	github.com/notnil/chess v1.2.0
 	github.com/pelletier/go-toml v1.8.0 // indirect
