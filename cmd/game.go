@@ -43,6 +43,22 @@ func playerColor() chess.Color {
 	return chess.Black
 }
 
+// Player's shell prompt
+func playerPrompt() string {
+	if gPlayerColor == "white" {
+		return gWhitePrompt
+	}
+	return gBlackPrompt
+}
+
+// Engine's shell prompt
+func enginePrompt() string {
+	if gPlayerColor == "white" {
+		return gBlackPrompt
+	}
+	return gWhitePrompt
+}
+
 // Readline completion of all the valid moves left.
 func validMovesConstructor(string) (moves []string) {
 	for _, move := range gGame.Position().ValidMoves() {

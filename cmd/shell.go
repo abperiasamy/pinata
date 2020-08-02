@@ -99,12 +99,14 @@ func Shell() {
 			os.Exit(1)
 		}
 
-		fmt.Println(gBlackPrompt + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
+		fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
 		if gVisual {
 			fmt.Print(gGame.Position().Board().Draw())
 		}
 	}
-	l.SetPrompt(gWhitePrompt)
+
+	l.SetPrompt(playerPrompt())
+
 	for {
 
 		line, err := l.Readline()
@@ -129,7 +131,7 @@ func Shell() {
 		case strings.HasPrefix(line, "/visual"):
 			if gVisual {
 				gVisual = false
-				fmt.Println("You are playing", Bold(Yellow("blind")))
+				fmt.Println("You are playing", Bold(Yellow("blind")), "now.")
 			} else {
 				gVisual = true
 				fmt.Print(gGame.Position().Board().Draw())
@@ -185,7 +187,7 @@ func Shell() {
 				continue
 			}
 
-			fmt.Println(gBlackPrompt + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
+			fmt.Println(playerPrompt() + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
 			if gVisual {
 				fmt.Print(gGame.Position().Board().Draw())
 			}
