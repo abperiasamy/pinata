@@ -187,7 +187,7 @@ func Shell() {
 				continue
 			}
 
-			fmt.Println(playerPrompt() + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
+			fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
 			if gVisual {
 				fmt.Print(gGame.Position().Board().Draw())
 			}
