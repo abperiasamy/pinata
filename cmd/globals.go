@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"github.com/notnil/chess"
+	"github.com/abperiasamy/chess"
 )
 
 // Global defaults. Avoid global variables as much as possible.

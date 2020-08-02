@@ -19,8 +19,8 @@ package cmd
 import (
 	"log"
 
+	"github.com/abperiasamy/chess"
 	"github.com/freeeve/uci"
-	"github.com/notnil/chess"
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -48,6 +48,14 @@ func validMovesConstructor(string) (moves []string) {
 	for _, move := range gGame.Position().ValidMoves() {
 		moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
 		moves = append(moves, moveSAN)
+	}
+	return moves
+}
+
+// Readline completion of all the valid moves left.
+func validMoves() (moves string) {
+	for _, move := range gGame.Position().ValidMoves() {
+		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
 	}
 	return moves
 }

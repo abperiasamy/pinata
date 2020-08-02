@@ -20,27 +20,25 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strings"
 
+	"github.com/abperiasamy/chess"
 	"github.com/chzyer/readline"
 	"github.com/freeeve/uci"
 	. "github.com/logrusorgru/aurora"
-	"github.com/notnil/chess"
 )
 
 var completer = readline.NewPrefixCompleter(
 	readline.PcItemDynamic(validMovesConstructor),
 	readline.PcItem("resign"),
-	readline.PcItem("/quit"),
 	readline.PcItem("/new"),
+	readline.PcItem("/visual"),
+	readline.PcItem("/quit"),
 
 	readline.PcItem("/keys",
 		readline.PcItem("vi"),
 		readline.PcItem("emacs"),
-	),
-	readline.PcItem("/blind",
-		readline.PcItem("on"),
-		readline.PcItem("off"),
 	),
 )
 
@@ -62,15 +60,7 @@ func Shell() {
 	}
 	defer eng.Close()
 
-	/*
-		eng.SetOption("Ponder", false)
-		eng.SetOption("Threads", "8")
-
-			eng.NewGame(uci.NewGameOpts{
-			InitialFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
-			// Side:       uci.Black,
-		})
-	*/
+	eng.SendOption("Threads", "8")
 
 	l, err := readline.NewEx(&readline.Config{
 		// Prompt: "\033[31m»\033[0m ",
@@ -87,10 +77,36 @@ func Shell() {
 	}
 	defer l.Close()
 
-	blindMode := true
+	if gPlayerColor == "black" {
+		results, err := eng.GoDepth(10, uci.HighestDepthOnly)
+		if err != nil {
+			fmt.Println(gGame.Position().Board().Draw())
+			fmt.Println(err)
+			os.Exit(1)
+		}
 
+		moveSAN, err := chess.LongAlgebraicNotation{}.Decode(gGame.Position(), results.BestMove)
+		if err != nil {
+			fmt.Println("SANe " + gGame.Position().Board().Draw())
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		err = gGame.Move(moveSAN)
+		if err != nil {
+			fmt.Println(gGame.Position().Board().Draw())
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		fmt.Println(gBlackPrompt + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
+		if gVisual {
+			fmt.Print(gGame.Position().Board().Draw())
+		}
+	}
 	l.SetPrompt(gWhitePrompt)
 	for {
+
 		line, err := l.Readline()
 		if err == readline.ErrInterrupt {
 			if len(line) == 0 {
@@ -110,47 +126,41 @@ func Shell() {
 			// fmt.Println(Outcome().String())
 			goto end
 
-		case strings.HasPrefix(line, "/blind"):
+		case strings.HasPrefix(line, "/visual"):
+			if gVisual {
+				gVisual = false
+				fmt.Println("You are playing", Bold(Yellow("blind")))
+			} else {
+				gVisual = true
+				fmt.Print(gGame.Position().Board().Draw())
+			}
+			continue
+
+		case strings.HasPrefix(line, "/keys"):
 			cmd := strings.SplitN(line, " ", 2)
 			if len(cmd) > 1 {
 				switch cmd[1] {
-				case "on":
-					blindMode = true
-				case "off":
-					blindMode = false
+				case "vi":
+					l.SetVimMode(true)
+				case "emacs":
+					l.SetVimMode(false)
+				default:
+					fmt.Println("Allowed arguments are", Bold(Yellow("[vi|emacs]")))
+					continue
 				}
 			}
 
-			if blindMode {
-				fmt.Println("You are playing", Bold(Yellow("BLIND")))
-			} else {
-				fmt.Println("You are playing", Bold(Yellow("VISUAL")))
-			}
-
-		case strings.HasPrefix(line, "/keys "):
-			mode := line[6:]
-			switch mode {
-			case "vi":
-				l.SetVimMode(true)
-			case "emacs":
-				l.SetVimMode(false)
-			default:
-				println("invalid mode:", mode)
-			}
-		case line == "/keys":
 			if l.IsVimMode() {
-				println("current mode: vim")
+				fmt.Println(Bold(Yellow("vi")), "key bindings active")
 			} else {
-				println("current mode: emacs")
+				fmt.Println(Bold(Yellow("emacs")), "key bindings active")
 			}
 		case line == "/quit":
 			goto end
 		default:
-
 			err := gGame.MoveStr(line)
 			if err != nil {
-				fmt.Println("invalid move: " + line) //
-				//fmt.Println("Allowed Moves: "+gGame.ValidMoves())
+				fmt.Println("Allowed moves:", Bold(Yellow(validMoves())))
 				continue
 			}
 			eng.SetFEN(gGame.FEN())
@@ -168,16 +178,16 @@ func Shell() {
 				continue
 			}
 
-			fmt.Println(gBlackPrompt + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
-
 			err = gGame.Move(moveSAN)
 			if err != nil {
 				fmt.Println(gGame.Position().Board().Draw())
 				fmt.Println(err)
 				continue
 			}
-			if !blindMode {
-				fmt.Println(gGame.Position().Board().Draw())
+
+			fmt.Println(gBlackPrompt + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
+			if gVisual {
+				fmt.Print(gGame.Position().Board().Draw())
 			}
 		}
 	}
