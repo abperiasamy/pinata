@@ -86,10 +86,9 @@ func Shell() {
 	l.SetPrompt(playerPrompt())
 
 	for {
-
-		line, err := l.Readline()
+		cmd, err := l.Readline()
 		if err == readline.ErrInterrupt {
-			if len(line) == 0 {
+			if len(cmd) == 0 {
 				break
 			} else {
 				continue
@@ -98,15 +97,16 @@ func Shell() {
 			break
 		}
 
-		line = strings.TrimSpace(line)
+		cmd = strings.TrimSpace(cmd)
 		switch {
-		case line == "":
-		case line == "resign":
-			gGame.Resign(chess.Black)
-			// fmt.Println(Outcome().String())
+		case cmd == "": // no input, do nothing.
+
+		case cmd == "resign":
+			gGame.Resign(playerColor())
+			isGameOver(gGame)
 			goto end
 
-		case strings.HasPrefix(line, "/visual"):
+		case strings.HasPrefix(cmd, "/visual"):
 			if gVisual {
 				gVisual = false
 				fmt.Println("You are playing", Bold(Yellow("blind")), "now.")
@@ -117,8 +117,8 @@ func Shell() {
 			}
 			continue
 
-		case strings.HasPrefix(line, "/keys"):
-			cmd := strings.SplitN(line, " ", 2)
+		case strings.HasPrefix(cmd, "/keys"):
+			cmd := strings.SplitN(cmd, " ", 2)
 			if len(cmd) > 1 {
 				switch cmd[1] {
 				case "vi":
@@ -136,10 +136,10 @@ func Shell() {
 			} else {
 				fmt.Println(Bold(Yellow("emacs")), "key bindings active")
 			}
-		case line == "/quit":
+		case cmd == "/quit":
 			goto end
 		default:
-			engineCounterMove(eng, gGame, line)
+			engineCounterMove(eng, gGame, cmd)
 			if isGameOver(gGame) {
 				goto end
 			}
