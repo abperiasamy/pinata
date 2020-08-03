@@ -56,8 +56,9 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&gCfgFile, "config", "c", "pinata.toml", "config file")
 	rootCmd.PersistentFlags().StringVarP(&gEngineBinary, "engine", "e", "stockfish", "path to UCI compatible chess engine executable")
-	rootCmd.PersistentFlags().StringVarP(&gPlayerColor, "play", "p", "white", "choose player color")
+	rootCmd.PersistentFlags().StringVarP(&gPlayerColor, "play", "p", "white", "choose black or white")
 	rootCmd.PersistentFlags().BoolVarP(&gVisual, "visual", "v", false, "cheat blindfold")
+	rootCmd.PersistentFlags().IntVarP(&gEngineDepth, "depth", "d", 10, "engine search depth")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

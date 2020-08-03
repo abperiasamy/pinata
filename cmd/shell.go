@@ -166,7 +166,7 @@ func isGameOver(game *chess.Game) bool {
 
 // Human's turn
 func engineMove(engine *uci.Engine, game *chess.Game) error {
-	results, err := engine.GoDepth(10, uci.HighestDepthOnly)
+	results, err := engine.GoDepth(gEngineDepth, uci.HighestDepthOnly)
 	if err != nil {
 		fmt.Println(game.Position().Board().Draw())
 		fmt.Println(err)
@@ -202,7 +202,7 @@ func engineCounterMove(engine *uci.Engine, game *chess.Game, moveStr string) err
 		return err
 	}
 	engine.SetFEN(game.FEN())
-	results, err := engine.GoDepth(10, uci.HighestDepthOnly)
+	results, err := engine.GoDepth(gEngineDepth, uci.HighestDepthOnly)
 	if err != nil {
 		fmt.Println(game.Position().Board().Draw())
 		fmt.Println(err)

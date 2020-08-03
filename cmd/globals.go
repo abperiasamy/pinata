@@ -24,6 +24,7 @@ import (
 var (
 	gCfgFile      string
 	gEngineBinary string
+	gEngineDepth  int
 	gPlayerColor  string
 	gVisual       bool
 
