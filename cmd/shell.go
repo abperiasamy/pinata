@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/abperiasamy/chess"
@@ -77,31 +76,10 @@ func Shell() {
 	}
 	defer l.Close()
 
-	if gPlayerColor == "black" {
-		results, err := eng.GoDepth(10, uci.HighestDepthOnly)
+	if playerColor() == chess.Black {
+		err = engineMove(eng, gGame)
 		if err != nil {
-			fmt.Println(gGame.Position().Board().Draw())
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		moveSAN, err := chess.LongAlgebraicNotation{}.Decode(gGame.Position(), results.BestMove)
-		if err != nil {
-			fmt.Println("SANe " + gGame.Position().Board().Draw())
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		err = gGame.Move(moveSAN)
-		if err != nil {
-			fmt.Println(gGame.Position().Board().Draw())
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
-		if gVisual {
-			fmt.Print(gGame.Position().Board().Draw())
+			fmt.Errorf("Engine Failure: ", err)
 		}
 	}
 
@@ -134,6 +112,7 @@ func Shell() {
 				fmt.Println("You are playing", Bold(Yellow("blind")), "now.")
 			} else {
 				gVisual = true
+				fmt.Println("You are playing", Bold(Yellow("visual")), "now.")
 				fmt.Print(gGame.Position().Board().Draw())
 			}
 			continue
@@ -160,38 +139,93 @@ func Shell() {
 		case line == "/quit":
 			goto end
 		default:
-			err := gGame.MoveStr(line)
-			if err != nil {
-				fmt.Println("Allowed moves:", Bold(Yellow(validMoves())))
-				continue
-			}
-			eng.SetFEN(gGame.FEN())
-			results, err := eng.GoDepth(10, uci.HighestDepthOnly)
-			if err != nil {
-				fmt.Println(gGame.Position().Board().Draw())
-				fmt.Println(err)
-				continue
-			}
-
-			moveSAN, err := chess.LongAlgebraicNotation{}.Decode(gGame.Position(), results.BestMove)
-			if err != nil {
-				fmt.Println("SANe " + gGame.Position().Board().Draw())
-				fmt.Println(err)
-				continue
-			}
-
-			err = gGame.Move(moveSAN)
-			if err != nil {
-				fmt.Println(gGame.Position().Board().Draw())
-				fmt.Println(err)
-				continue
-			}
-
-			fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(gGame.Position(), moveSAN))
-			if gVisual {
-				fmt.Print(gGame.Position().Board().Draw())
+			engineCounterMove(eng, gGame, line)
+			if isGameOver(gGame) {
+				goto end
 			}
 		}
 	}
 end:
+}
+
+func isGameOver(game *chess.Game) bool {
+	switch game.Outcome() {
+	case chess.NoOutcome:
+		return false
+	case chess.Draw:
+		fmt.Println(Bold(Yellow("Game draw!!")))
+	case chess.WhiteWon:
+		fmt.Println(Bold(Yellow("White won the game!!")))
+	case chess.BlackWon:
+		fmt.Println(Bold(Yellow("Black won the game!!")))
+	default:
+		panic(game.Outcome()) // should never happen
+	}
+	return true // The end.
+}
+
+// Human's turn
+func engineMove(engine *uci.Engine, game *chess.Game) error {
+	results, err := engine.GoDepth(10, uci.HighestDepthOnly)
+	if err != nil {
+		fmt.Println(game.Position().Board().Draw())
+		fmt.Println(err)
+		return err
+	}
+
+	moveSAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
+	if err != nil {
+		fmt.Println("SANe " + game.Position().Board().Draw())
+		fmt.Println(err)
+		return err
+	}
+
+	err = game.Move(moveSAN)
+	if err != nil {
+		fmt.Println(game.Position().Board().Draw())
+		fmt.Println(err)
+		return err
+	}
+
+	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
+	if gVisual {
+		fmt.Print(game.Position().Board().Draw())
+	}
+	return nil
+}
+
+// Engine's turn
+func engineCounterMove(engine *uci.Engine, game *chess.Game, moveStr string) error {
+	err := game.MoveStr(moveStr)
+	if err != nil {
+		fmt.Println("Allowed moves:", Bold(Yellow(validMoves())))
+		return err
+	}
+	engine.SetFEN(game.FEN())
+	results, err := engine.GoDepth(10, uci.HighestDepthOnly)
+	if err != nil {
+		fmt.Println(game.Position().Board().Draw())
+		fmt.Println(err)
+		return err
+	}
+
+	moveSAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
+	if err != nil {
+		fmt.Println("SANe " + game.Position().Board().Draw())
+		fmt.Println(err)
+		return err
+	}
+
+	err = game.Move(moveSAN)
+	if err != nil {
+		fmt.Println(game.Position().Board().Draw())
+		fmt.Println(err)
+		return err
+	}
+
+	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
+	if gVisual {
+		fmt.Print(game.Position().Board().Draw())
+	}
+	return nil
 }
