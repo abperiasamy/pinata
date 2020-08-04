@@ -17,21 +17,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/abperiasamy/chess"
-	"github.com/freeeve/uci"
 )
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func NewEngine(enginePath string) (*uci.Engine, error) {
-	eng, err := uci.NewEngine(enginePath)
-	if err != nil {
-		log.Fatal(err)
-	}
+func NewGame() *chess.Game {
+	// Use human friendly short Algebraic notation (like e4, e5)
+	return chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
+}
 
-	return eng, err
+func isGameOver(game *chess.Game) bool {
+	switch game.Outcome() {
+	case chess.NoOutcome:
+		return false
+	case chess.Draw:
+		fmt.Println(gConsole.Bold(gConsole.Yellow("Game draw!!")))
+	case chess.WhiteWon:
+		fmt.Println(gConsole.Bold(gConsole.Yellow("White won the game!!")))
+	case chess.BlackWon:
+		fmt.Println(gConsole.Bold(gConsole.Yellow("Black won the game!!")))
+	default:
+		panic(game.Outcome()) // should never happen
+	}
+	return true // The end.
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -43,35 +52,21 @@ func playerColor() chess.Color {
 	return chess.Black
 }
 
-// Player's shell prompt
-func playerPrompt() string {
-	if gPlayerColor == "white" {
-		return gWhitePrompt
+// Readline completion of all the valid moves left.
+func validMovesConstructor(game *chess.Game) func(string) []string {
+	return func(string) (moves []string) {
+		for _, move := range game.Position().ValidMoves() {
+			moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
+			moves = append(moves, moveSAN)
+		}
+		return moves
 	}
-	return gBlackPrompt
-}
-
-// Engine's shell prompt
-func enginePrompt() string {
-	if gPlayerColor == "white" {
-		return gBlackPrompt
-	}
-	return gWhitePrompt
 }
 
 // Readline completion of all the valid moves left.
-func validMovesConstructor(string) (moves []string) {
-	for _, move := range gGame.Position().ValidMoves() {
-		moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
-		moves = append(moves, moveSAN)
-	}
-	return moves
-}
-
-// Readline completion of all the valid moves left.
-func validMoves() (moves string) {
-	for _, move := range gGame.Position().ValidMoves() {
-		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
+func validMoves(game *chess.Game) (moves string) {
+	for _, move := range game.Position().ValidMoves() {
+		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
 	}
 	return moves
 }

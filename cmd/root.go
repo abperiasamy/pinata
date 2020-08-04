@@ -33,12 +33,22 @@ var rootCmd = &cobra.Command{
 
 	// Transfer control to readline shell.
 	Run: func(cmd *cobra.Command, args []string) {
-		Shell()
+		onStart() // Perform post initialization
+		shell()   // Shell controls the game interaction from start to finish.
+		onStop()  // Perform cleanup
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// Perform post initialization routines right before starting the game.
+func onStart() {
+	initGlobals()
+}
+
+// Perform post initialization routines right after the game ends.
+func onStop() {
+
+}
+
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -48,6 +58,8 @@ func Execute() {
 
 // Load config file and register flags.
 func init() {
+	// fmt.Print("\033[?25l") // Hide cursor
+	// Initialize config and ENV first. Command-line flags may override these settings.
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -58,6 +70,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&gEngineBinary, "engine", "e", "stockfish", "path to UCI compatible chess engine executable")
 	rootCmd.PersistentFlags().StringVarP(&gPlayerColor, "play", "p", "white", "choose black or white")
 	rootCmd.PersistentFlags().BoolVarP(&gVisual, "visual", "v", false, "cheat blindfold")
+	rootCmd.PersistentFlags().BoolVar(&gNoColor, "no-color", false, "disable colors")
+	rootCmd.PersistentFlags().BoolVar(&gBrightBg, "bright", false, "render on a brighter console background")
 	rootCmd.PersistentFlags().IntVarP(&gEngineDepth, "depth", "d", 10, "engine search depth")
 
 	// Cobra also supports local flags, which will only run

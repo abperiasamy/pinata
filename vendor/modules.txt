@@ -1,9 +1,13 @@
 # github.com/abperiasamy/chess v1.1.1-0.20200802121616-631a621c0549
 ## explicit
 github.com/abperiasamy/chess
+# github.com/chzyer/logex v1.1.10
+## explicit
 # github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 ## explicit
 github.com/chzyer/readline
+# github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1
+## explicit
 # github.com/freeeve/uci v0.0.0-20200629112257-2a3e349f2e55
 ## explicit
 github.com/freeeve/uci

@@ -17,7 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"github.com/abperiasamy/chess"
+	"github.com/logrusorgru/aurora"
 )
 
 // Global defaults. Avoid global variables as much as possible.
@@ -27,9 +27,22 @@ var (
 	gEngineDepth  int
 	gPlayerColor  string
 	gVisual       bool
+	gNoColor      bool
+	gBrightBg     bool
+	gConsole      aurora.Aurora
 
 	gVersion     = "1.0-alpha"
-	gGame        = chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
-	gBlackPrompt = "(B) "
-	gWhitePrompt = "(W) "
+	gWhitePrompt = "█"
+	gBlackPrompt = "░"
 )
+
+// Called before starting the shell.
+func initGlobals() {
+	// Use for color printing
+	gConsole = aurora.NewAurora(!gNoColor)
+
+	// Invert colors on a brighter background
+	if gBrightBg {
+		gWhitePrompt, gBlackPrompt = gBlackPrompt, gWhitePrompt
+	}
+}
