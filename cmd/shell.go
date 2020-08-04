@@ -110,7 +110,7 @@ func shell() {
 			} else {
 				gVisual = true
 				fmt.Println("You are playing", gConsole.Bold(gConsole.Yellow("visual")), "now.")
-				fmt.Print(game.Position().Board().Draw())
+				drawBoard(game)
 			}
 			continue
 

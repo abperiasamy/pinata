@@ -27,6 +27,18 @@ func NewGame() *chess.Game {
 	return chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
 }
 
+func drawBoard(game *chess.Game) {
+	if !gVisual {
+		return // playing blind
+	}
+
+	if gHumanIsBlack { // Rotate the board, black facing the human.
+		fmt.Print(game.Position().Board().Rotate().Rotate().DrawForBlack())
+	} else {
+		fmt.Print(game.Position().Board().Draw())
+	}
+}
+
 func isGameOver(game *chess.Game) bool {
 	switch game.Outcome() {
 	case chess.NoOutcome:

@@ -73,9 +73,7 @@ func engineMove(engine *uci.Engine, game *chess.Game) error {
 	}
 
 	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
-	if gVisual {
-		fmt.Print(game.Position().Board().Draw())
-	}
+	drawBoard(game)
 	return nil
 }
 
@@ -106,8 +104,6 @@ func engineCounterMove(engine *uci.Engine, game *chess.Game, moveStr string) err
 	}
 
 	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
-	if gVisual {
-		fmt.Print(game.Position().Board().Draw())
-	}
+	drawBoard(game)
 	return nil
 }

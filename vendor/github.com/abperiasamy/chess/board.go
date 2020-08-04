@@ -115,11 +115,11 @@ func (b *Board) Draw() string {
 	tableBuf := new(bytes.Buffer)
 	table := tablewriter.NewWriter(tableBuf)
 	table.SetRowLine(true)
-	table.SetCenterSeparator(au.Gray(7-1, "┼").String())
-	table.SetColumnSeparator(au.Gray(7-1, "│").String())
-	table.SetRowSeparator(au.Gray(7-1, "─").String())
-
+	table.SetCenterSeparator(au.Gray(6, "┼").String())
+	table.SetColumnSeparator(au.Gray(6, "│").String())
+	table.SetRowSeparator(au.Gray(6, "─").String())
 	table.SetHeader([]string{"", "A", "B", "C", "D", "E", "F", "G", "H"})
+
 	if ColorConsole {
 		table.SetHeaderColor(
 			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
@@ -155,13 +155,67 @@ func (b *Board) Draw() string {
 			} else {
 				s[f+1] = p.String()
 			}
-
 		}
 		table.Append(s)
 	}
 
 	table.Render()
+	return tableBuf.String()
+}
 
+// Draw returns visual representation of the board for the black side.
+func (b *Board) DrawForBlack() string {
+	au := aurora.NewAurora(ColorConsole)
+	tableBuf := new(bytes.Buffer)
+	table := tablewriter.NewWriter(tableBuf)
+	table.SetRowLine(true)
+	table.SetCenterSeparator(au.Gray(6, "┼").String())
+	table.SetColumnSeparator(au.Gray(6, "│").String())
+	table.SetRowSeparator(au.Gray(6, "─").String())
+	table.SetHeader([]string{"", "H", "G", "F", "E", "D", "C", "B", "A"})
+
+	if ColorConsole {
+		table.SetHeaderColor(
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+		)
+		table.SetColumnColor(
+			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+		)
+	}
+
+	s := make([]string, numOfSquaresInRow+1)
+	i := 0 // Invert the file. We are on the black side.
+	for r := 7; r >= 0; r-- {
+		s[0] = Rank(i).String()
+		i++
+		for f := 0; f < numOfSquaresInRow; f++ {
+			p := b.Piece(getSquare(File(f), Rank(r)))
+			if p == NoPiece {
+				s[f+1] = ""
+			} else {
+				s[f+1] = p.String()
+			}
+		}
+		table.Append(s)
+	}
+
+	table.Render()
 	return tableBuf.String()
 }
 
