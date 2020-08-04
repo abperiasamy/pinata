@@ -23,9 +23,9 @@ By default, the computer engine plays black. You make your first move. Use <TAB>
 ```
 $ ./pinata 
 █ 🙇  e4
-░ 🤖~ e6
+░ 🤖  e6
 █ 🙇  Nf3 
-░ 🤖~ d5
+░ 🤖  d5
 █ 🙇 <TAB>
 Ke2      Qe2      Rg1      Be2      Bd3      Bc4      Bb5+     Ba6      Na3      Nc3      Ng1      Nd4      Nh4      Ne5      Ng5      
 a3       a4       b3       b4       c3       c4       d3       d4       g3       g4       h3       h4       exd5     e5       resign   
@@ -36,7 +36,7 @@ a3       a4       b3       b4       c3       c4       d3       d4       g3      
 You can cheat the blindfold with `--visual` or `/visual` options and play interactively. Use `/visual` to toggle the board display in practice sessions to verify your memory.
 $ ./pinata --visual
 █ 🙇  e4
-░ 🤖~ e6
+░ 🤖  e6
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
 │   │ A │ B │ C │ D │ E │ F │ G │ H │
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
