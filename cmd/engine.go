@@ -36,22 +36,6 @@ func NewEngine(enginePath string) (*uci.Engine, error) {
 	return eng, err
 }
 
-// Engine's shell prompt
-func enginePrompt() string {
-	if gHumanIsBlack {
-		return gWhitePrompt + " 💻  "
-	}
-	return gBlackPrompt + " 💻  "
-}
-
-// Human's shell prompt
-func humanPrompt() string {
-	if gHumanIsBlack {
-		return gBlackPrompt + " 🙇  "
-	}
-	return gWhitePrompt + " 🙇  "
-}
-
 // Human's turn
 func engineMove(engine *uci.Engine, game *chess.Game) error {
 	results, err := engine.GoDepth(gEngineDepth, uci.HighestDepthOnly)

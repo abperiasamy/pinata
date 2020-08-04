@@ -16,10 +16,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
-import "fmt"
+// Engine's shell prompt
+func enginePrompt() string {
+	if gHumanIsBlack {
+		return gWhitePrompt + " 🤖  "
+	}
+	return gBlackPrompt + " 🤖  "
+}
 
-// Dynamic prompt for the white player
-func whitePrompt() string {
-	fmt.Println("")
-	return gWhitePrompt
+// Human's shell prompt
+func humanPrompt() string {
+	if gHumanIsBlack {
+		return gBlackPrompt + " 🙇  "
+	}
+	return gWhitePrompt + " 🙇  "
 }
