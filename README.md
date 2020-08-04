@@ -56,10 +56,14 @@ $ ./pinata --visual
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
 │ 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
-(W)
+█ 🙇
 ```
 ## Contribute to Piñata Project
 Please follow Piñata [Contributor's Guide](https://github.com/abperiasamy/pinata/blob/master/code_of_conduct.md)
+
+## Credits
+https://github.com/notnil/chess - Chess library by Logan Spears (notnil)
+https://github.com/freeeve/uci - UCI library by Eve Freeman (freeeve)
 
 ## License
 Piñata is free software, licensed under [GNU AGPL v3 or later](https://github.com/abperiasamy/pinata/blob/master/LICENSE)
