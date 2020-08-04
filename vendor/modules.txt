@@ -1,4 +1,4 @@
-# github.com/abperiasamy/chess v1.1.1-0.20200802121616-631a621c0549
+# github.com/abperiasamy/chess v1.1.1-0.20200804062952-7f7f21c902e2
 ## explicit
 github.com/abperiasamy/chess
 # github.com/chzyer/logex v1.1.10

@@ -45,11 +45,11 @@ func isGameOver(game *chess.Game) bool {
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func playerColor() chess.Color {
-	if gPlayerColor == "white" {
-		return chess.White
+func humanColor() chess.Color {
+	if gHumanIsBlack {
+		return chess.Black
 	}
-	return chess.Black
+	return chess.White
 }
 
 // Readline completion of all the valid moves left.

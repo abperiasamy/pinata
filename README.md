@@ -9,14 +9,14 @@ Usage:
   pinata [flags]
 
 Flags:
+  -b, --black           choose the black side
   -d, --depth int       engine search depth (default 10)
   -e, --engine string   path to UCI compatible chess engine executable (default "stockfish")
-  -p, --play string     choose black or white (default "white")
-  -v, --visual          cheat blindfold
-      --no-color        disable colors 
-      --version         version for pinata
   -h, --help            help for pinata
-  
+  -l, --light           invert the colors for lighter console background
+      --no-color        disable colors
+      --version         version for pinata
+  -v, --visual          cheat blindfold
 ```
 
 ## Playing Blind
@@ -58,7 +58,6 @@ $ ./pinata -v
 │ 1 │ ♜ │ ♞ │ ♝ │ ♛ │ ♚ │ ♝ │ ♞ │ ♜ │
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
 (W)
-
 ```
 ## Contribute to Piñata Project
 Please follow Piñata [Contributor's Guide](https://github.com/abperiasamy/pinata/blob/master/code_of_conduct.md)

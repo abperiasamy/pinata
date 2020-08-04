@@ -15,8 +15,8 @@ github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
-github.com/abperiasamy/chess v1.1.1-0.20200802121616-631a621c0549 h1:5pAdnVb1KTWnvCk5d9wHWc0ZbTDs916R4D0M6DyiX7Q=
-github.com/abperiasamy/chess v1.1.1-0.20200802121616-631a621c0549/go.mod h1:hc+XwHpkhuNmJpgLqNLLCCdsD/pDAiUHBh981cgDP38=
+github.com/abperiasamy/chess v1.1.1-0.20200804062952-7f7f21c902e2 h1:dtRUUTTunDVfEJqXPtj1lSPBqbvE64y5QZ1m0gUsJt4=
+github.com/abperiasamy/chess v1.1.1-0.20200804062952-7f7f21c902e2/go.mod h1:hc+XwHpkhuNmJpgLqNLLCCdsD/pDAiUHBh981cgDP38=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=

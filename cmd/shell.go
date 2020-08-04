@@ -73,14 +73,14 @@ func shell() {
 	}
 	defer l.Close()
 
-	if playerColor() == chess.Black {
+	if humanColor() == chess.Black {
 		err = engineMove(eng, game)
 		if err != nil {
 			fmt.Errorf("Engine Failure: ", err)
 		}
 	}
 
-	l.SetPrompt(playerPrompt())
+	l.SetPrompt(humanPrompt())
 
 	for {
 		cmd, err := l.Readline()
@@ -99,7 +99,7 @@ func shell() {
 		case cmd == "": // no input, do nothing.
 
 		case cmd == "resign":
-			game.Resign(playerColor())
+			game.Resign(humanColor())
 			isGameOver(game)
 			goto end
 

@@ -38,18 +38,18 @@ func NewEngine(enginePath string) (*uci.Engine, error) {
 
 // Engine's shell prompt
 func enginePrompt() string {
-	if gPlayerColor == "white" {
-		return gBlackPrompt + " 💻  "
+	if gHumanIsBlack {
+		return gWhitePrompt + " 💻  "
 	}
-	return gWhitePrompt + " 💻  "
+	return gBlackPrompt + " 💻  "
 }
 
-// Player's shell prompt
-func playerPrompt() string {
-	if gPlayerColor == "white" {
-		return gWhitePrompt + " 🙇  "
+// Human's shell prompt
+func humanPrompt() string {
+	if gHumanIsBlack {
+		return gBlackPrompt + " 🙇  "
 	}
-	return gBlackPrompt + " 🙇  "
+	return gWhitePrompt + " 🙇  "
 }
 
 // Human's turn

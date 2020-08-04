@@ -25,10 +25,10 @@ var (
 	gCfgFile      string
 	gEngineBinary string
 	gEngineDepth  int
-	gPlayerColor  string
+	gHumanIsBlack bool
 	gVisual       bool
 	gNoColor      bool
-	gBrightBg     bool
+	gLightBg      bool
 	gConsole      aurora.Aurora
 
 	gVersion     = "1.0-alpha"
@@ -40,9 +40,4 @@ var (
 func initGlobals() {
 	// Use for color printing
 	gConsole = aurora.NewAurora(!gNoColor)
-
-	// Invert colors on a brighter background
-	if gBrightBg {
-		gWhitePrompt, gBlackPrompt = gBlackPrompt, gWhitePrompt
-	}
 }

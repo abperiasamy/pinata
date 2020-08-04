@@ -134,14 +134,14 @@ func (b *Board) Draw() string {
 		)
 		table.SetColumnColor(
 			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
-			tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiWhiteColor},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
+			tablewriter.Colors{tablewriter.Normal, tablewriter.Normal},
 		)
 	}
 
