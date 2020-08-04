@@ -61,7 +61,7 @@ $ ./pinata -v
 
 ```
 ## Contribute to Piñata Project
-Please follow Piñata [Contributor's Guide](https://github.com/abperiasamy/pinata/blob/master/CONTRIBUTING.md)
+Please follow Piñata [Contributor's Guide](https://github.com/abperiasamy/pinata/blob/master/code_of_conduct.md)
 
 ## License
 Piñata is free software, licensed under [GNU AGPL v3 or later](https://github.com/abperiasamy/pinata/blob/master/LICENSE)
