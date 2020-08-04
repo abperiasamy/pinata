@@ -31,7 +31,7 @@ var (
 	gLightBg      bool
 	gConsole      aurora.Aurora
 
-	gVersion     = "1.0-alpha"
+	gVersion     = "1.0"
 	gWhitePrompt = "█"
 	gBlackPrompt = "░"
 )

@@ -22,21 +22,21 @@ Flags:
 By default, the computer engine plays black. You make your first move. Use <TAB> to auto-complete possible moves or commands.
 ```
 $ ./pinata 
-[W]< e4
-[B]> e5
-[W]< Nc3 
-[B]> f6
-[W]< 
-Ke2      Qe2      Qf3      Qg4      Qh5      Rb1      Be2      Bd3      Bc4      Bb5      Ba6      Nge2     Nf3      Nh3      Nb1
-Nce2     Na4      Nb5      Nd5      a3       a4       b3       b4       d3       d4       f3       f4       g3       g4       h3
-h4       resign   /visual  /quit    /keys
+█ 🙇  e4
+░ 💻  e6
+█ 🙇  Nf3 
+░ 💻  d5
+█ 🙇 <TAB>
+Ke2      Qe2      Rg1      Be2      Bd3      Bc4      Bb5+     Ba6      Na3      Nc3      Ng1      Nd4      Nh4      Ne5      Ng5      
+a3       a4       b3       b4       c3       c4       d3       d4       g3       g4       h3       h4       exd5     e5       resign   
+/visual  /quit    /keys
 ```
 ## Playing Visual
 ```
 You can cheat the blindfold with `--visual` or `/visual` options and play interactively. Use `/visual` to toggle the board display in practice sessions to verify your memory.
-$ ./pinata -v
-(W) e4
-(B) e6
+$ ./pinata --visual
+█ 🙇  e4
+░ 💻  e6
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
 │   │ A │ B │ C │ D │ E │ F │ G │ H │
 ┼───┼───┼───┼───┼───┼───┼───┼───┼───┼
