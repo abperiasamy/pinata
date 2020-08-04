@@ -32,8 +32,8 @@ a3       a4       b3       b4       c3       c4       d3       d4       g3      
 /visual  /quit    /keys
 ```
 ## Playing Visual
+You can cheat the blindfold with `--visual` flag and play interactively. Use `/visual` command to toggle the board display during the practice sessions to verify your memory.
 ```
-You can cheat the blindfold with `--visual` or `/visual` options and play interactively. Use `/visual` to toggle the board display in practice sessions to verify your memory.
 $ ./pinata --visual
 █ 🙇  e4
 ░ 🤖  e6
