@@ -50,6 +50,7 @@ func shell() {
 	completer := readline.NewPrefixCompleter(
 		readline.PcItemDynamic(validMovesConstructor(game)),
 		readline.PcItem("resign"),
+		readline.PcItem("/fen"),
 		readline.PcItem("/visual"),
 		readline.PcItem("/quit"),
 
@@ -102,6 +103,9 @@ func shell() {
 			game.Resign(humanColor())
 			isGameOver(game)
 			goto end
+
+		case cmd == "/fen":
+			fmt.Println(game.FEN())
 
 		case strings.HasPrefix(cmd, "/visual"):
 			if gVisual {
