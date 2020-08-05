@@ -28,6 +28,7 @@ const (
 // Global defaults. Avoid global variables as much as possible.
 var (
 	gCfgFile      string
+	gGamePath     string
 	gEngineBinary string
 	gEngineDepth  int
 	gHumanIsBlack bool

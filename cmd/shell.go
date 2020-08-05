@@ -42,6 +42,27 @@ func filterInput(r rune) (rune, bool) {
 func shell() {
 	game := newGame()
 
+	if gGamePath != "" {
+		filename := gGamePath
+		// Append default name to dir if empty.
+		fInfo, err := os.Stat(filename)
+		if err == nil && fInfo.IsDir() {
+			filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
+		}
+
+		// Check if file exist.
+		if _, err := os.Stat(filename); os.IsNotExist(err) {
+			fmt.Println(gConsole.Bold(gConsole.Yellow(filename)), "does not exist")
+			os.Exit(1)
+		}
+
+		if game = loadPGN(filename); game != nil { // Success
+			fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
+		} else { // Failure
+			os.Exit(1)
+		}
+	}
+
 	eng, err := newEngine(gEngineBinary)
 	if err != nil {
 		log.Fatal(err)
@@ -126,23 +147,6 @@ func shell() {
 				fmt.Println(game.FEN())
 			}
 
-		case strings.HasPrefix(cmd, "/save"):
-			cmd := strings.SplitN(cmd, " ", 2)
-			filename := gGameFilename
-			if len(cmd) == 2 {
-				filename = cmd[1]
-			}
-
-			// Append default name to dir if empty.
-			fInfo, err := os.Stat(filename)
-			if err == nil && fInfo.IsDir() {
-				filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
-			}
-
-			if savePGN(game, filename) == nil { // Success
-				fmt.Println("Game saved to", gConsole.Bold(gConsole.Yellow(filename)))
-			}
-
 		case strings.HasPrefix(cmd, "/load"):
 			cmd := strings.SplitN(cmd, " ", 2)
 			filename := gGameFilename
@@ -166,6 +170,23 @@ func shell() {
 			if g != nil { // Success
 				game = g // Overwrite the current game.
 				fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
+			}
+
+		case strings.HasPrefix(cmd, "/save"):
+			cmd := strings.SplitN(cmd, " ", 2)
+			filename := gGameFilename
+			if len(cmd) == 2 {
+				filename = cmd[1]
+			}
+
+			// Append default name to dir if empty.
+			fInfo, err := os.Stat(filename)
+			if err == nil && fInfo.IsDir() {
+				filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
+			}
+
+			if savePGN(game, filename) == nil { // Success
+				fmt.Println("Game saved to", gConsole.Bold(gConsole.Yellow(filename)))
 			}
 
 		case strings.HasPrefix(cmd, "/visual"):
