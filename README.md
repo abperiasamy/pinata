@@ -11,6 +11,7 @@ Flags:
   -b, --black           choose the black side
   -d, --depth int       engine search depth (default 10)
   -e, --engine string   path to UCI compatible chess engine executable (default "stockfish")
+  -f, --file string     load game from a PGN file
   -h, --help            help for pinata
   -l, --light           invert the colors for lighter console background
       --no-color        disable colors
@@ -29,7 +30,7 @@ $ ./pinata
 █ 🙇 <TAB>
 Ke2      Qe2      Rg1      Be2      Bd3      Bc4      Bb5+     Ba6      Na3      Nc3      Ng1      Nd4      Nh4      Ne5      Ng5      
 a3       a4       b3       b4       c3       c4       d3       d4       g3       g4       h3       h4       exd5     e5       resign   
-/fen /visual  /quit    /keys
+/fen     /save    /load    /visual  /quit    /keys/fen /visual  /quit    /keys
 ```
 ## Playing Visual
 You can cheat the blindfold with `--visual` flag and play interactively. Use `/visual` command to toggle the board display during the practice sessions to verify your memory.
