@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/abperiasamy/chess"
@@ -38,9 +40,9 @@ func filterInput(r rune) (rune, bool) {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func shell() {
-	game := NewGame()
+	game := newGame()
 
-	eng, err := NewEngine(gEngineBinary)
+	eng, err := newEngine(gEngineBinary)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,6 +53,8 @@ func shell() {
 		readline.PcItemDynamic(validMovesConstructor(game)),
 		readline.PcItem("resign"),
 		readline.PcItem("/fen"),
+		readline.PcItem("/save"),
+		readline.PcItem("/load"),
 		readline.PcItem("/visual"),
 		readline.PcItem("/quit"),
 
@@ -120,6 +124,48 @@ func shell() {
 				}
 			} else { // Just display the current FEN
 				fmt.Println(game.FEN())
+			}
+
+		case strings.HasPrefix(cmd, "/save"):
+			cmd := strings.SplitN(cmd, " ", 2)
+			filename := gGameFilename
+			if len(cmd) == 2 {
+				filename = cmd[1]
+			}
+
+			// Append default name to dir if empty.
+			fInfo, err := os.Stat(filename)
+			if err == nil && fInfo.IsDir() {
+				filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
+			}
+
+			if savePGN(game, filename) == nil { // Success
+				fmt.Println("Game saved to", gConsole.Bold(gConsole.Yellow(filename)))
+			}
+
+		case strings.HasPrefix(cmd, "/load"):
+			cmd := strings.SplitN(cmd, " ", 2)
+			filename := gGameFilename
+			if len(cmd) == 2 {
+				filename = cmd[1]
+			}
+
+			// Append default name to dir if empty.
+			fInfo, err := os.Stat(filename)
+			if err == nil && fInfo.IsDir() {
+				filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
+			}
+
+			// Check if file exist.
+			if _, err := os.Stat(filename); os.IsNotExist(err) {
+				fmt.Println(gConsole.Bold(gConsole.Yellow(filename)), "does not exist")
+				continue
+			}
+
+			g := loadPGN(filename)
+			if g != nil { // Success
+				game = g // Overwrite the current game.
+				fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
 			}
 
 		case strings.HasPrefix(cmd, "/visual"):

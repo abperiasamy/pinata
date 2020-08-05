@@ -18,13 +18,66 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"strings"
+	"time"
 
 	"github.com/abperiasamy/chess"
 )
 
-func NewGame() *chess.Game {
+// Initalize a new game.
+func newGame() *chess.Game {
 	// Use human friendly short Algebraic notation (like e4, e5)
 	return chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
+}
+
+// Start a game from a PGN file
+func loadPGN(filename string) *chess.Game {
+	pgnDat, err := ioutil.ReadFile(filename)
+	if err != nil {
+		fmt.Println("Unable to open", gConsole.Bold(gConsole.Yellow(filename)))
+		return nil
+	}
+
+	pgn, err := chess.PGN(strings.NewReader(string(pgnDat)))
+	if err != nil {
+		fmt.Println(gConsole.Bold(gConsole.Yellow(filename)), "is not a valid PGN file.")
+		return nil
+	}
+	return chess.NewGame(pgn)
+}
+
+// Save the game to a PGN file
+func savePGN(game *chess.Game, filename string) error {
+	curTime := time.Now()
+	curDate := fmt.Sprintf("%d-%02d-%02d", curTime.Year(), curTime.Month(), curTime.Day())
+	game.AddTagPair("Date", curDate)
+	game.AddTagPair("Result", game.Outcome().String())
+
+	// Save the engine name.
+	if humanColor() == chess.White {
+		game.AddTagPair("White", "Human")
+		game.AddTagPair("Black", gEngineBinary)
+	} else {
+		game.AddTagPair("White", gEngineBinary)
+		game.AddTagPair("Black", "Human")
+	}
+
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Println("Unable to create", gConsole.Bold(gConsole.Yellow(filename)))
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(game.String() + "\n")
+	if err != nil {
+		fmt.Println("Unable to save the game to", gConsole.Bold(gConsole.Yellow(filename)))
+		return err
+	}
+
+	return nil // Success
 }
 
 func drawBoard(game *chess.Game) {

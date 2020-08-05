@@ -25,7 +25,7 @@ import (
 )
 
 // The shell initializes the engine upon entry.
-func NewEngine(enginePath string) (*uci.Engine, error) {
+func newEngine(enginePath string) (*uci.Engine, error) {
 	eng, err := uci.NewEngine(enginePath)
 	if err != nil {
 		fmt.Println(gConsole.Red(err))

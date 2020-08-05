@@ -20,6 +20,11 @@ import (
 	"github.com/logrusorgru/aurora"
 )
 
+// Global constants
+const (
+	gGameFilename = "pinata.pgn"
+)
+
 // Global defaults. Avoid global variables as much as possible.
 var (
 	gCfgFile      string
