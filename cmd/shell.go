@@ -101,11 +101,26 @@ func shell() {
 
 		case cmd == "resign":
 			game.Resign(humanColor())
-			isGameOver(game)
+			isGameOver(game) // Game is over :p
 			goto end
 
-		case cmd == "/fen":
-			fmt.Println(game.FEN())
+		case strings.HasPrefix(cmd, "/fen"):
+			cmd := strings.SplitN(cmd, " ", 2)
+			if len(cmd) > 1 {
+				fenStr := cmd[1]
+				eng.SetFEN(fenStr)
+				fen, err := chess.FEN(fenStr)
+				if err != nil {
+					fmt.Println("Not a valid FEN.")
+					continue
+				}
+				game = chess.NewGame(fen)
+				if isGameOver(game) {
+					goto end
+				}
+			} else { // Just display the current FEN
+				fmt.Println(game.FEN())
+			}
 
 		case strings.HasPrefix(cmd, "/visual"):
 			if gVisual {
