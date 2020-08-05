@@ -1,4 +1,4 @@
-# Piñata (alpha)
+# Piñata (v1.0)
 Play blindfold chess against any UCI compatible engines like [Stockfish](https://stockfishchess.org/). 
 
 ## Usage

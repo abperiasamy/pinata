@@ -22,6 +22,7 @@ import (
 
 // Global constants
 const (
+	gVersion      = "1.0"
 	gGameFilename = "pinata.pgn"
 )
 
@@ -37,7 +38,6 @@ var (
 	gLightBg      bool
 	gConsole      aurora.Aurora
 
-	gVersion     = "1.0"
 	gWhitePrompt = "█"
 	gBlackPrompt = "░"
 )

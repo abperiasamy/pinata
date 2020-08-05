@@ -28,7 +28,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "pinata",
 	Short:   "Piñata - play blindfold chess against UCI compatible engines.",
-	Version: "1.0aplha",
+	Version: gVersion,
 	Long:    ``,
 
 	// Transfer control to readline shell.
