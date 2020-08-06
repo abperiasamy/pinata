@@ -30,9 +30,11 @@ import (
 
 func filterInput(r rune) (rune, bool) {
 	switch r {
-	// block CtrlZ feature
-	case readline.CharCtrlZ:
-		return r, false
+	/*
+		// block CtrlZ feature
+		case readline.CharCtrlZ:
+			return r, false
+	*/
 	}
 	return r, true
 }

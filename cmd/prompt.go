@@ -18,16 +18,30 @@ package cmd
 
 // Engine's shell prompt
 func enginePrompt() string {
-	if gHumanIsBlack {
-		return gWhitePrompt + " 🤖  "
+	if gNoColor {
+		if gHumanIsBlack {
+			return gWhitePrompt + ":-] "
+		}
+		return gBlackPrompt + ":-] "
+	} else {
+		if gHumanIsBlack {
+			return gWhitePrompt + " 🤖  "
+		}
+		return gBlackPrompt + " 🤖  "
 	}
-	return gBlackPrompt + " 🤖  "
 }
 
 // Human's shell prompt
 func humanPrompt() string {
-	if gHumanIsBlack {
-		return gBlackPrompt + " 🙇  "
+	if gNoColor {
+		if gHumanIsBlack {
+			return gBlackPrompt + ":-) "
+		}
+		return gWhitePrompt + ":-) "
+	} else {
+		if gHumanIsBlack {
+			return gBlackPrompt + " 🙇  "
+		}
+		return gWhitePrompt + " 🙇  "
 	}
-	return gWhitePrompt + " 🙇  "
 }
