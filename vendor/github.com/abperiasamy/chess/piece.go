@@ -173,19 +173,22 @@ func (p Piece) Color() Color {
 	return NoColor
 }
 
+var (
+	pieceUnicodes     = []string{" ", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟"}
+	pieceUnicodesDark = []string{" ", "♚", "♛", "♜", "♝", "♞", "♟", "♔", "♕", "♖", "♗", "♘", "♙"}
+	pieceChars        = []string{" ", "K", "Q", "R", "B", "N", "P", "k", "q", "r", "b", "n", "p"}
+)
+
 // String implements the fmt.Stringer interface
 func (p Piece) String() string {
-	if DarkConsole {
-		return darkPieceUnicodes[int(p)]
-	} else {
-		return lightPieceUnicodes[int(p)]
+	if ConsoleUnicode {
+		if ConsoleDark {
+			return pieceUnicodesDark[int(p)]
+		}
+		return pieceUnicodes[int(p)]
 	}
+	return pieceChars[int(p)]
 }
-
-var (
-	lightPieceUnicodes = []string{" ", "♔", "♕", "♖", "♗", "♘", "♙", "♚", "♛", "♜", "♝", "♞", "♟"}
-	darkPieceUnicodes  = []string{" ", "♚", "♛", "♜", "♝", "♞", "♟", "♔", "♕", "♖", "♗", "♘", "♙"}
-)
 
 func (p Piece) getFENChar() string {
 	for key, piece := range fenPieceMap {

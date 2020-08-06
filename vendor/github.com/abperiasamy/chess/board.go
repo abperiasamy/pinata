@@ -109,18 +109,27 @@ func (b *Board) Transpose() *Board {
 	return NewBoard(m)
 }
 
+var (
+	ConsoleUnicode = true  // This console supports unicode printing.
+	ConsoleDark    = false // This console has a dark background.
+	ConsoleColor   = true  // This console supports color printing.
+)
+
 // Draw returns visual representation of the board useful for debugging.
 func (b *Board) Draw() string {
-	au := aurora.NewAurora(ColorConsole)
+	au := aurora.NewAurora(ConsoleColor)
 	tableBuf := new(bytes.Buffer)
 	table := tablewriter.NewWriter(tableBuf)
 	table.SetRowLine(true)
-	table.SetCenterSeparator(au.Gray(6, "┼").String())
-	table.SetColumnSeparator(au.Gray(6, "│").String())
-	table.SetRowSeparator(au.Gray(6, "─").String())
 	table.SetHeader([]string{"", "A", "B", "C", "D", "E", "F", "G", "H"})
 
-	if ColorConsole {
+	if ConsoleUnicode { // Enhance tablewriter with unicode lines.
+		table.SetCenterSeparator(au.Gray(6, "┼").String())
+		table.SetColumnSeparator(au.Gray(6, "│").String())
+		table.SetRowSeparator(au.Gray(6, "─").String())
+	}
+
+	if ConsoleColor {
 		table.SetHeaderColor(
 			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
 			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
@@ -165,16 +174,19 @@ func (b *Board) Draw() string {
 
 // Draw returns visual representation of the board for the black side.
 func (b *Board) DrawForBlack() string {
-	au := aurora.NewAurora(ColorConsole)
+	au := aurora.NewAurora(ConsoleColor)
 	tableBuf := new(bytes.Buffer)
 	table := tablewriter.NewWriter(tableBuf)
 	table.SetRowLine(true)
-	table.SetCenterSeparator(au.Gray(6, "┼").String())
-	table.SetColumnSeparator(au.Gray(6, "│").String())
-	table.SetRowSeparator(au.Gray(6, "─").String())
 	table.SetHeader([]string{"", "H", "G", "F", "E", "D", "C", "B", "A"})
 
-	if ColorConsole {
+	if ConsoleUnicode { // Enhance tablewriter with unicode lines.
+		table.SetCenterSeparator(au.Gray(6, "┼").String())
+		table.SetColumnSeparator(au.Gray(6, "│").String())
+		table.SetRowSeparator(au.Gray(6, "─").String())
+	}
+
+	if ConsoleColor {
 		table.SetHeaderColor(
 			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
 			tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiBlackColor},
@@ -199,13 +211,14 @@ func (b *Board) DrawForBlack() string {
 		)
 	}
 
+	bb := b.Rotate().Rotate() // Rotate to black side.
 	s := make([]string, numOfSquaresInRow+1)
 	i := 0 // Invert the file. We are on the black side.
 	for r := 7; r >= 0; r-- {
 		s[0] = Rank(i).String()
 		i++
 		for f := 0; f < numOfSquaresInRow; f++ {
-			p := b.Piece(getSquare(File(f), Rank(r)))
+			p := bb.Piece(getSquare(File(f), Rank(r)))
 			if p == NoPiece {
 				s[f+1] = ""
 			} else {

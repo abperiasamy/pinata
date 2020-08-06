@@ -3,7 +3,7 @@ module github.com/abperiasamy/pinata
 go 1.14
 
 require (
-	github.com/abperiasamy/chess v1.1.1-0.20200804092601-2487cb727a17
+	github.com/abperiasamy/chess v1.1.1-0.20200806085408-19da0d67c424
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect

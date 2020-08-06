@@ -86,7 +86,7 @@ func drawBoard(game *chess.Game) {
 	}
 
 	if gHumanIsBlack { // Rotate the board, black facing the human.
-		fmt.Print(game.Position().Board().Rotate().Rotate().DrawForBlack())
+		fmt.Print(game.Position().Board().DrawForBlack())
 	} else {
 		fmt.Print(game.Position().Board().Draw())
 	}
