@@ -50,12 +50,18 @@ func loadPGN(filename string) *chess.Game {
 
 // Save the game to a PGN file
 func savePGN(game *chess.Game, filename string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Println("Unable to create", gConsole.Bold(gConsole.Yellow(filename)))
+		return err
+	}
+	defer file.Close()
+
+	// Generate PGN content.
 	curTime := time.Now()
 	curDate := fmt.Sprintf("%d-%02d-%02d", curTime.Year(), curTime.Month(), curTime.Day())
 	game.AddTagPair("Date", curDate)
 	game.AddTagPair("Result", game.Outcome().String())
-
-	// Save the engine name.
 	if humanColor() == chess.White {
 		game.AddTagPair("White", "Human")
 		game.AddTagPair("Black", gEngineBinary)
@@ -64,13 +70,7 @@ func savePGN(game *chess.Game, filename string) error {
 		game.AddTagPair("Black", "Human")
 	}
 
-	file, err := os.Create(filename)
-	if err != nil {
-		fmt.Println("Unable to create", gConsole.Bold(gConsole.Yellow(filename)))
-		return err
-	}
-	defer file.Close()
-
+	// Save the engine name.
 	_, err = file.WriteString(game.String() + "\n")
 	if err != nil {
 		fmt.Println("Unable to save the game to", gConsole.Bold(gConsole.Yellow(filename)))

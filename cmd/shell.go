@@ -19,6 +19,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -28,6 +29,7 @@ import (
 	"github.com/chzyer/readline"
 )
 
+// Readline input filter
 func filterInput(r rune) (rune, bool) {
 	switch r {
 	/*
@@ -37,6 +39,20 @@ func filterInput(r rune) (rune, bool) {
 	*/
 	}
 	return r, true
+}
+
+// Readline file listing
+func completeLoad(path string) func(string) []string {
+	return func(line string) []string {
+		names := make([]string, 0)
+		files, _ := ioutil.ReadDir(path)
+		for _, f := range files {
+			if strings.HasSuffix(f.Name(), ".pgn") {
+				names = append(names, f.Name())
+			}
+		}
+		return names
+	}
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -76,8 +92,8 @@ func shell() {
 		readline.PcItemDynamic(validMovesConstructor(game)),
 		readline.PcItem("resign"),
 		readline.PcItem("/fen"),
-		readline.PcItem("/save"),
-		readline.PcItem("/load"),
+		readline.PcItem("/save", readline.PcItem(gGameFilename)),
+		readline.PcItem("/load", readline.PcItemDynamic(completeLoad("."))),
 		readline.PcItem("/visual"),
 		readline.PcItem("/quit"),
 
@@ -166,6 +182,8 @@ func shell() {
 			if _, err := os.Stat(filename); os.IsNotExist(err) {
 				fmt.Println(gConsole.Bold(gConsole.Yellow(filename)), "does not exist")
 				continue
+			} else if !strings.HasSuffix(filename, ".pgn") {
+				filename += ".pgn"
 			}
 
 			g := loadPGN(filename)
@@ -178,13 +196,15 @@ func shell() {
 			cmd := strings.SplitN(cmd, " ", 2)
 			filename := gGameFilename
 			if len(cmd) == 2 {
-				filename = cmd[1]
+				filename = strings.TrimSpace(cmd[1])
 			}
 
 			// Append default name to dir if empty.
 			fInfo, err := os.Stat(filename)
 			if err == nil && fInfo.IsDir() {
 				filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
+			} else if !strings.HasSuffix(filename, ".pgn") {
+				filename += ".pgn"
 			}
 
 			if savePGN(game, filename) == nil { // Success
