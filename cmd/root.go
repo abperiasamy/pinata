@@ -19,6 +19,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/abperiasamy/chess"
 	"github.com/spf13/cobra"
@@ -83,7 +84,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&gGamePath, "file", "f", "", "load game from a PGN file")
 	rootCmd.PersistentFlags().BoolVarP(&gHumanIsBlack, "black", "b", false, "choose the black side")
 	rootCmd.PersistentFlags().BoolVarP(&gVisual, "visual", "v", false, "cheat blindfold")
-	rootCmd.PersistentFlags().BoolVar(&gNoColor, "no-color", false, "disable colors")
+	if runtime.GOOS == "windows" { // disable color and unicode support on Windows by default
+		rootCmd.PersistentFlags().BoolVar(&gNoColor, "color", true, "disable colors")
+	} else {
+		rootCmd.PersistentFlags().BoolVar(&gNoColor, "no-color", false, "disable colors")
+	}
 	rootCmd.PersistentFlags().BoolVarP(&gLightBg, "light", "l", false, "invert the colors for lighter console background")
 	rootCmd.PersistentFlags().IntVarP(&gEngineDepth, "depth", "d", 10, "engine search depth")
 

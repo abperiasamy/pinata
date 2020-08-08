@@ -204,6 +204,9 @@ func shell() {
 			if err == nil && fInfo.IsDir() {
 				filename = filepath.Clean(filepath.Join(filename) + "/" + gGameFilename)
 			} else if !strings.HasSuffix(filename, ".pgn") {
+				if strings.HasSuffix(filename, ".") { // avoid generating "..pgn"
+					filename = strings.TrimSuffix(filename, ".")
+				}
 				filename += ".pgn"
 			}
 
