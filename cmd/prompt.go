@@ -16,18 +16,51 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+const (
+	gWhitePrompt string = "█"
+	gBlackPrompt string = "░"
+)
+
+// White prompt
+func whitePrompt() string {
+	// ASCII prompt
+	if gNoColor {
+		return "W "
+	}
+
+	// Unicode prompt
+	if gLightBg { // invert on light background.
+		return gBlackPrompt
+	}
+	return gWhitePrompt
+}
+
+// Black prompt
+func blackPrompt() string {
+	// ASCII prompt
+	if gNoColor {
+		return "B "
+	}
+
+	// Unicode prompt
+	if gLightBg { // invert on light background.
+		return gWhitePrompt
+	}
+	return gBlackPrompt
+}
+
 // Engine's shell prompt
 func enginePrompt() string {
 	if gNoColor {
 		if gHumanIsBlack {
-			return gWhitePrompt + ":-] "
+			return whitePrompt() + ":] "
 		}
-		return gBlackPrompt + ":-] "
+		return blackPrompt() + ":] "
 	} else {
 		if gHumanIsBlack {
-			return gWhitePrompt + " 🤖  "
+			return whitePrompt() + " 🤖  "
 		}
-		return gBlackPrompt + " 🤖  "
+		return blackPrompt() + " 🤖  "
 	}
 }
 
@@ -35,13 +68,13 @@ func enginePrompt() string {
 func humanPrompt() string {
 	if gNoColor {
 		if gHumanIsBlack {
-			return gBlackPrompt + ":-) "
+			return blackPrompt() + ":) "
 		}
-		return gWhitePrompt + ":-) "
+		return whitePrompt() + ":) "
 	} else {
 		if gHumanIsBlack {
-			return gBlackPrompt + " 🙇  "
+			return blackPrompt() + " 🙇  "
 		}
-		return gWhitePrompt + " 🙇  "
+		return whitePrompt() + " 🙇  "
 	}
 }

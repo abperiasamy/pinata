@@ -47,7 +47,6 @@ func onStart() {
 	// Invert colors on a brighter background
 	if gLightBg {
 		chess.ConsoleDark = false
-		gWhitePrompt, gBlackPrompt = gBlackPrompt, gWhitePrompt
 	} else {
 		chess.ConsoleDark = true // also prepare chess package for dark background
 	}

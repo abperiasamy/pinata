@@ -37,9 +37,6 @@ var (
 	gNoColor      bool
 	gLightBg      bool
 	gConsole      aurora.Aurora
-
-	gWhitePrompt = "█"
-	gBlackPrompt = "░"
 )
 
 // Called before starting the shell.
