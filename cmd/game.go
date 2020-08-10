@@ -97,13 +97,16 @@ func isGameOver(game *chess.Game) bool {
 	case chess.NoOutcome:
 		return false
 	case chess.Draw:
-		fmt.Println(gConsole.Bold(gConsole.Yellow("Game draw!!")))
+		fmt.Println(gConsole.Bold(gConsole.Yellow("Game Draw")).String() +
+			" (" + gConsole.Bold(game.Method().String()).String() + ")")
 	case chess.WhiteWon:
-		fmt.Println(gConsole.Bold(gConsole.Yellow("White won the game!!")))
+		fmt.Println(gConsole.Bold(gConsole.Yellow("White Won")).String() +
+			" (" + gConsole.Bold(game.Method().String()).String() + ")")
 	case chess.BlackWon:
-		fmt.Println(gConsole.Bold(gConsole.Yellow("Black won the game!!")))
+		fmt.Println(gConsole.Bold(gConsole.Yellow("Black Won")).String() +
+			" (" + gConsole.Bold(game.Method().String()).String() + ")")
 	default:
-		panic(game.Outcome()) // should never happen
+		panic(game.Outcome()) // should never happen.
 	}
 	return true // The end.
 }
