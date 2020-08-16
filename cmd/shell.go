@@ -96,7 +96,6 @@ func shell() {
 		readline.PcItem("/load", readline.PcItemDynamic(completeLoad("."))),
 		readline.PcItem("/visual"),
 		readline.PcItem("/quit"),
-
 		readline.PcItem("/keys",
 			readline.PcItem("vi"),
 			readline.PcItem("emacs"),
@@ -135,6 +134,8 @@ func shell() {
 				continue
 			}
 		} else if err == io.EOF {
+			game.Resign(humanColor())
+			isGameOver(game) // Game is over :p
 			break
 		}
 
@@ -244,8 +245,12 @@ func shell() {
 			} else {
 				fmt.Println(gConsole.Bold(gConsole.Yellow("emacs")), "key bindings active")
 			}
-		case cmd == "/quit":
+
+		case cmd == "/quit": // Same as "resign" command.
+			game.Resign(humanColor())
+			isGameOver(game) // Game is over :p
 			goto end
+
 		default:
 			engineCounterMove(eng, game, cmd)
 			if isGameOver(game) {
