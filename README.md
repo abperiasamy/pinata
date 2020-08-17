@@ -1,4 +1,4 @@
-# Piñata (v1.1)
+# Piñata (v1.3)
 Piñata is an interactive shell to play blindfold chess against computers. Install any UCI compatible chess engine like [Stockfish](https://stockfishchess.org/download/) in the standard executable search path and Piñata will pick it up.
 
 ## Download
