@@ -58,7 +58,8 @@ func completeLoad(path string) func(string) []string {
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func shell() {
-	game := newGame()
+	// Initialize a new game and save it in global gGame.
+	gGame = chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
 
 	if gGamePath != "" {
 		filename := gGamePath
@@ -74,7 +75,7 @@ func shell() {
 			os.Exit(1)
 		}
 
-		if game = loadPGN(filename); game != nil { // Success
+		if gGame = loadPGN(filename); gGame != nil { // Success
 			fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
 		} else { // Failure
 			os.Exit(1)
@@ -89,7 +90,7 @@ func shell() {
 	eng.SendOption("Threads", "8")
 
 	completer := readline.NewPrefixCompleter(
-		readline.PcItemDynamic(validMovesConstructor(game)),
+		readline.PcItemDynamic(validMovesConstructor()),
 		readline.PcItem("resign"),
 		readline.PcItem("/fen"),
 		readline.PcItem("/save", readline.PcItem(gGameFilename)),
@@ -117,7 +118,7 @@ func shell() {
 	defer l.Close()
 
 	if humanColor() == chess.Black {
-		err = engineMove(eng, game)
+		err = engineMove(eng, gGame)
 		if err != nil {
 			fmt.Errorf("Engine Failure: ", err)
 		}
@@ -134,8 +135,8 @@ func shell() {
 				continue
 			}
 		} else if err == io.EOF {
-			game.Resign(humanColor())
-			isGameOver(game) // Game is over :p
+			gGame.Resign(humanColor())
+			isGameOver(gGame) // Game is over :p
 			break
 		}
 
@@ -144,8 +145,8 @@ func shell() {
 		case cmd == "": // no input, do nothing.
 
 		case cmd == "resign":
-			game.Resign(humanColor())
-			isGameOver(game) // Game is over :p
+			gGame.Resign(humanColor())
+			isGameOver(gGame) // Game is over :p
 			goto end
 
 		case strings.HasPrefix(cmd, "/fen"):
@@ -158,12 +159,12 @@ func shell() {
 					fmt.Println("Not a valid FEN.")
 					continue
 				}
-				game = chess.NewGame(fen)
-				if isGameOver(game) {
+				gGame = chess.NewGame(fen)
+				if isGameOver(gGame) {
 					goto end
 				}
 			} else { // Just display the current FEN
-				fmt.Println(game.FEN())
+				fmt.Println(gGame.FEN())
 			}
 
 		case strings.HasPrefix(cmd, "/load"):
@@ -189,7 +190,7 @@ func shell() {
 
 			g := loadPGN(filename)
 			if g != nil { // Success
-				game = g // Overwrite the current game.
+				gGame = g // Overwrite the current game.
 				fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
 			}
 
@@ -211,7 +212,7 @@ func shell() {
 				filename += ".pgn"
 			}
 
-			if savePGN(game, filename) == nil { // Success
+			if savePGN(gGame, filename) == nil { // Success
 				fmt.Println("Game saved to", gConsole.Bold(gConsole.Yellow(filename)))
 			}
 
@@ -222,7 +223,7 @@ func shell() {
 			} else {
 				gVisual = true
 				fmt.Println("You are playing", gConsole.Bold(gConsole.Yellow("visual")), "now.")
-				drawBoard(game)
+				drawBoard(gGame)
 			}
 			continue
 
@@ -247,13 +248,13 @@ func shell() {
 			}
 
 		case cmd == "/quit": // Same as "resign" command.
-			game.Resign(humanColor())
-			isGameOver(game) // Game is over :p
+			gGame.Resign(humanColor())
+			isGameOver(gGame) // Game is over :p
 			goto end
 
 		default:
-			engineCounterMove(eng, game, cmd)
-			if isGameOver(game) {
+			engineCounterMove(eng, gGame, cmd)
+			if isGameOver(gGame) {
 				goto end
 			}
 		}

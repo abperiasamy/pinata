@@ -26,12 +26,6 @@ import (
 	"github.com/abperiasamy/chess"
 )
 
-// Initalize a new game.
-func newGame() *chess.Game {
-	// Use human friendly short Algebraic notation (like e4, e5)
-	return chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
-}
-
 // Start a game from a PGN file
 func loadPGN(filename string) *chess.Game {
 	pgnDat, err := ioutil.ReadFile(filename)
@@ -121,10 +115,10 @@ func humanColor() chess.Color {
 }
 
 // Readline completion of all the valid moves left.
-func validMovesConstructor(game *chess.Game) func(string) []string {
+func validMovesConstructor() func(string) []string {
 	return func(string) (moves []string) {
-		for _, move := range game.Position().ValidMoves() {
-			moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
+		for _, move := range gGame.Position().ValidMoves() {
+			moveSAN := chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
 			moves = append(moves, moveSAN)
 		}
 		return moves
@@ -133,8 +127,8 @@ func validMovesConstructor(game *chess.Game) func(string) []string {
 
 // Readline completion of all the valid moves left.
 func validMoves(game *chess.Game) (moves string) {
-	for _, move := range game.Position().ValidMoves() {
-		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
+	for _, move := range gGame.Position().ValidMoves() {
+		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
 	}
 	return moves
 }

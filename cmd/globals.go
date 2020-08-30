@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"github.com/abperiasamy/chess"
 	"github.com/logrusorgru/aurora"
 )
 
@@ -37,6 +38,8 @@ var (
 	gNoColor      bool
 	gLightBg      bool
 	gConsole      aurora.Aurora
+
+	gGame *chess.Game
 )
 
 // Called before starting the shell.
