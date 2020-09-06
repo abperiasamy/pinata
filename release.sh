@@ -18,14 +18,14 @@ then
 fi
 
 ## Check if there are any uncommitted changes.
-if ! [ -z "$(git status --porcelain)" ]
+if ! [ -z "$(git status --porcelain 2&1>/dev/null)" ]
 then
     echo "Error: There are uncommitted changes in your git repository."
     exit 1
 fi
 
 ## Check if goreleaser is installed.
-if ! hash goreleaser 2>/dev/null
+if ! [ hash goreleaser 2&1>/dev/null ]
 then
     echo "Error: \"goreleaser\" tool is installed in your system."
     exit 1
