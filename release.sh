@@ -25,7 +25,7 @@ then
 fi
 
 ## Check if goreleaser is installed.
-if ! [ hash goreleaser 2&1>/dev/null ]
+if ! hash -d goreleaser 2>/dev/null
 then
     echo "Error: \"goreleaser\" tool is installed in your system."
     exit 1
