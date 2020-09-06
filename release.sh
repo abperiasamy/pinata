@@ -10,14 +10,14 @@ then
     exit 1
 fi
 
-## Check if there are any uncommitted changes
+## Check if there are any uncommitted changes.
 if ! [ -d .git ]
 then
     echo "Error: Your are not in a git repo."
     exit 1
 fi
 
-## Check if there are any uncommitted changes
+## Check if there are any uncommitted changes.
 if ! [ -z "$(git status --porcelain)" ]
 then
     echo "Error: There are uncommitted changes in your git repository."
@@ -31,7 +31,7 @@ then
     exit 1
 fi
 
-## Determine the last release tag
+## Determine the last release tag.
 OLD_VERSION=`git tag | tail -1 | cut -d'v' -f2`
 if test "$?" != "0"
 then
@@ -39,10 +39,11 @@ then
     exit 1
 fi
 
-## Update download URLs in `README.md` and `gVersion` string `cmd/globals.go` to reflect the new release.
+## Update release string across the repo.
 sed -i 's/v'$OLD_VERSION'/v'$NEW_VERSION'/g' README.md
 sed -i 's/_'$OLD_VERSION'/_'$NEW_VERSION'_/g' README.md
-sed -i 's/= "'$OLD_VERSION'"/= "'$NEW_VERSION'"/g' globals.go
+sed -i 's/= "'$OLD_VERSION'"/= "'$NEW_VERSION'"/g' cmd/globals.go
+git commit -am  "Releasing version v"$NEW_VERSION
 
 ## Tag the release.
 git tag -a v$NEW_VERSION -m "Releasing version v"$NEW_VERSION
