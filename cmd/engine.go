@@ -81,13 +81,14 @@ func engineCounterMove(engine *uci.Engine, game *chess.Game, moveStr string) err
 		return err
 	}
 
+	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
+
 	err = game.Move(moveSAN)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
 	drawBoard(game)
 	return nil
 }
