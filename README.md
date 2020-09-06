@@ -4,7 +4,7 @@ Piñata is an interactive shell to play blindfold chess against computers. Insta
 ## Download
 | OS         | Arch           | Link                                                                                                   |
 | ---------- | --------       | ------                                                                                                 |
-| GNU/Linux  | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.4/pinata_1.4_darwin_x64.tar.gz)   |
+| GNU/Linux  | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.4/pinata_1.4_linux_x64.tar.gz)   |
 | GNU/Linux  | Arm (64-bit)   | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.4/pinata_1.4_linux_a64.tar.gz)   |
 | GNU/Linux  | Arm (32-bit)   | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.4/pinata_1.4_linux_a32v7.tar.gz) |
 | Windows    | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.4/pinata_1.4_windows_x64.zip)    |
