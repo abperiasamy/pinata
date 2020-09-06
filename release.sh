@@ -2,14 +2,6 @@
 
 NEW_VERSION=$1
 
-## Check if version input is set.
-if [ -z $NEW_VERSION ]
-then
-    echo -e "Usage:\n\trelease.sh VERSION"
-    echo -e "Example:\n\t./release.sh 1.5"
-    exit 1
-fi
-
 ## Check if there are any uncommitted changes.
 if ! [ -d .git ]
 then
@@ -24,6 +16,23 @@ then
     exit 1
 fi
 
+## Determine the last release tag.
+OLD_VERSION=`git tag | tail -1 | cut -d'v' -f2`
+if test "$?" != "0"
+then
+    echo "Error: No previous release tag found."
+    exit 1
+fi
+
+## Check if version input is set.
+if [ -z $NEW_VERSION ]
+then
+    echo -e "Usage:\n\trelease.sh VERSION"
+    echo -e "Example:\n\t./release.sh 1.5"
+    echo -e "\nCurrent version is '$OLD_VERSION'.\n"
+    exit 1
+fi
+
 ## Check if goreleaser is installed.
 if ! hash -d goreleaser 2>/dev/null
 then
@@ -31,11 +40,10 @@ then
     exit 1
 fi
 
-## Determine the last release tag.
-OLD_VERSION=`git tag | tail -1 | cut -d'v' -f2`
-if test "$?" != "0"
+## Determine the we already made this release.
+if ! [ -z "$(git tag | grep v$NEW_VERSION)" ]
 then
-    echo "Error: No previous release tag found."
+    echo "Error: $NEW_VERSION already exists."
     exit 1
 fi
 
