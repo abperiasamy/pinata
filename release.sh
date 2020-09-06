@@ -49,7 +49,7 @@ fi
 
 ## Update release string across the repo.
 sed -i 's/v'$OLD_VERSION'/v'$NEW_VERSION'/g' README.md
-sed -i 's/_'$OLD_VERSION'/_'$NEW_VERSION'_/g' README.md
+sed -i 's/_'$OLD_VERSION'_/_'$NEW_VERSION'_/g' README.md
 sed -i 's/= "'$OLD_VERSION'"/= "'$NEW_VERSION'"/g' cmd/globals.go
 git commit -am  "Releasing version v"$NEW_VERSION
 git push
