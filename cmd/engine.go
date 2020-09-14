@@ -29,7 +29,7 @@ func newEngine(enginePath string) (*uci.Engine, error) {
 	eng, err := uci.NewEngine(enginePath)
 	if err != nil {
 		fmt.Println(gConsole.Red(err))
-		fmt.Println("Unable to initialize " + gConsole.Bold(gConsole.Yellow(gEngineBinary)).String() + ". Please use `--engine` flag to choose a UCI compatible engine.")
+		fmt.Println("Unable to initialize " + gConsole.Bold(gConsole.Red(gEngineBinary)).String() + ". Please use `--engine` flag to choose a UCI compatible engine.")
 		os.Exit(1)
 	}
 

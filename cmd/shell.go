@@ -61,6 +61,7 @@ func shell() {
 	// Initialize a new game and save it in global gGame.
 	gGame = chess.NewGame(chess.UseNotation(chess.AlgebraicNotation{}))
 
+	// Load game from PGN.
 	if gGamePath != "" {
 		filename := gGamePath
 		// Append default name to dir if empty.
@@ -71,14 +72,19 @@ func shell() {
 
 		// Check if file exist.
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			fmt.Println(gConsole.Bold(gConsole.Yellow(filename)), "does not exist")
+			fmt.Println(gConsole.Bold(gConsole.Red(filename)), "does not exist.")
 			os.Exit(1)
 		}
 
-		if gGame = loadPGN(filename); gGame != nil { // Success
-			fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
-		} else { // Failure
+		if gGame = loadPGN(filename); gGame == nil { // Failed to load the PGN.
+			// fmt.Println("Unable to open " + gConsole.Bold(gConsole.Red(filename)).String() + ".")
 			os.Exit(1)
+		}
+
+		// Check to see if the game already ended.
+		if isGameOver(gGame) {
+			drawBoard(gGame)
+			os.Exit(0)
 		}
 	}
 
@@ -182,7 +188,7 @@ func shell() {
 
 			// Check if file exist.
 			if _, err := os.Stat(filename); os.IsNotExist(err) {
-				fmt.Println(gConsole.Bold(gConsole.Yellow(filename)), "does not exist")
+				fmt.Println(gConsole.Bold(gConsole.Red(filename)), "does not exist")
 				continue
 			} else if !strings.HasSuffix(filename, ".pgn") {
 				filename += ".pgn"
@@ -190,8 +196,10 @@ func shell() {
 
 			g := loadPGN(filename)
 			if g != nil { // Success
-				gGame = g // Overwrite the current game.
-				fmt.Println("Game loaded from", gConsole.Bold(gConsole.Yellow(filename)))
+				gGame = g              // Overwrite the current game.
+				if isGameOver(gGame) { // Check to see the game already ended.
+					goto end
+				}
 			}
 
 		case strings.HasPrefix(cmd, "/save"):
@@ -213,7 +221,7 @@ func shell() {
 			}
 
 			if savePGN(gGame, filename) == nil { // Success
-				fmt.Println("Game saved to", gConsole.Bold(gConsole.Yellow(filename)))
+				fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(filename)))
 			}
 
 		case strings.HasPrefix(cmd, "/visual"):
