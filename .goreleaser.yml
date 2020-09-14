@@ -55,11 +55,11 @@ changelog:
     - '^docs:'
     - '^test:'
 
-dockers:
-  -
-    goos: linux
-    goarch: amd64
-    dockerfile: Dockerfile.release
-    image_templates:
-      - abperiasamy/pinata:{{ .Tag }}
-      - abperiasamy/pinata:latest
+# dockers:
+#   -
+#     goos: linux
+#     goarch: amd64
+#     dockerfile: Dockerfile.release
+#     image_templates:
+#       - abperiasamy/pinata:{{ .Tag }}
+#       - abperiasamy/pinata:latest
