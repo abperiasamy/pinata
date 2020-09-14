@@ -19,6 +19,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/abperiasamy/chess"
 	"github.com/freeeve/uci"
@@ -26,6 +27,16 @@ import (
 
 // The shell initializes the engine upon entry.
 func newEngine(enginePath string) (*uci.Engine, error) {
+	_, err := exec.LookPath(gEngineBinary)
+	if err != nil { // Alternatively look under games dir.
+		path, err := exec.LookPath("/usr/games/" + gEngineBinary)
+		if err != nil {
+			fmt.Println("Unable to find " + gConsole.Bold(gConsole.Red(gEngineBinary)).String() + ". Please use `--engine` flag to choose a UCI compatible engine.")
+			os.Exit(1)
+		}
+		gEngineBinary = path
+	}
+
 	eng, err := uci.NewEngine(enginePath)
 	if err != nil {
 		fmt.Println(gConsole.Red(err))
