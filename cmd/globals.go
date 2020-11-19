@@ -38,6 +38,7 @@ var (
 	gNoColor      bool
 	gLightBg      bool
 	gConsole      aurora.Aurora
+	gMoveCount    int = 1 // Increment on every black's move.
 
 	gGame *chess.Game
 )

@@ -16,6 +16,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+import (
+	"strconv"
+)
+
 const (
 	gWhitePrompt string = "█"
 	gBlackPrompt string = "░"
@@ -25,28 +29,30 @@ const (
 func whitePrompt() string {
 	// ASCII prompt
 	if gNoColor {
-		return "W "
+		return "W" + " " + strconv.Itoa(gMoveCount) + " "
 	}
 
 	// Unicode prompt
-	if gLightBg { // invert on light background.
-		return gBlackPrompt
+	if gLightBg { // Invert on light background.
+		return gBlackPrompt + " " + strconv.Itoa(gMoveCount) + " "
 	}
-	return gWhitePrompt
+	return gWhitePrompt + " " + strconv.Itoa(gMoveCount) + " "
 }
 
 // Black prompt
 func blackPrompt() string {
+	defer func() { gMoveCount += 1 }() // Count the nth move.
+
 	// ASCII prompt
 	if gNoColor {
-		return "B "
+		return "B" + " " + strconv.Itoa(gMoveCount) + " "
 	}
 
 	// Unicode prompt
-	if gLightBg { // invert on light background.
-		return gWhitePrompt
+	if gLightBg { // Invert on light background.
+		return gWhitePrompt + " " + strconv.Itoa(gMoveCount) + " "
 	}
-	return gBlackPrompt
+	return gBlackPrompt + " " + strconv.Itoa(gMoveCount) + " "
 }
 
 // Engine's shell prompt
@@ -58,9 +64,9 @@ func enginePrompt() string {
 		return blackPrompt() + ":] "
 	} else {
 		if gHumanIsBlack {
-			return whitePrompt() + " 🤖  "
+			return whitePrompt() + "🤖 "
 		}
-		return blackPrompt() + " 🤖  "
+		return blackPrompt() + "🤖 "
 	}
 }
 
@@ -73,8 +79,8 @@ func humanPrompt() string {
 		return whitePrompt() + ":) "
 	} else {
 		if gHumanIsBlack {
-			return blackPrompt() + " 🙇  "
+			return blackPrompt() + "🙇 "
 		}
-		return whitePrompt() + " 🙇  "
+		return whitePrompt() + "🙇 "
 	}
 }

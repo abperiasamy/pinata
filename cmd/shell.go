@@ -130,9 +130,8 @@ func shell() {
 		}
 	}
 
-	l.SetPrompt(humanPrompt())
-
 	for {
+		l.SetPrompt(humanPrompt())
 		cmd, err := l.Readline()
 		if err == readline.ErrInterrupt {
 			if len(cmd) == 0 {
