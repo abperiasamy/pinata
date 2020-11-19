@@ -23,7 +23,7 @@ import (
 
 // Global constants
 const (
-	gVersion      = "1.5"
+	gVersion      = "1.6"
 	gGameFilename = "pinata.pgn"
 )
 
