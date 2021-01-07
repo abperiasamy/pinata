@@ -18,7 +18,6 @@ package cmd
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -111,10 +110,9 @@ func shell() {
 	l, err := readline.NewEx(&readline.Config{
 		// Prompt: "\033[31m»\033[0m ",
 		// HistoryFile:     "/tmp/readline.tmp",
-		AutoComplete:    completer,
-		InterruptPrompt: "^C",
-		EOFPrompt:       "/quit",
-
+		AutoComplete:        completer,
+		InterruptPrompt:     "/quit",
+		EOFPrompt:           "\n",
 		HistorySearchFold:   true,
 		FuncFilterInputRune: filterInput,
 	})
@@ -134,17 +132,8 @@ func shell() {
 		l.SetPrompt(humanPrompt())
 		cmd, err := l.Readline()
 		if err == readline.ErrInterrupt {
-			if len(cmd) == 0 {
-				break
-			} else {
-				continue
-			}
-		} else if err == io.EOF {
-			gGame.Resign(humanColor())
-			isGameOver(gGame) // Game is over :p
-			break
+			cmd = "/quit"
 		}
-
 		cmd = strings.TrimSpace(cmd)
 		switch {
 		case cmd == "": // no input, do nothing.

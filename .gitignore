@@ -1,3 +1,4 @@
 pinata
 *~
 .goreleaser
+/dist
