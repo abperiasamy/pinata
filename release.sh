@@ -28,8 +28,8 @@ fi
 if [ -z $NEW_VERSION ]
 then
     echo -e "Usage:\n\trelease.sh VERSION"
-    echo -e "Example:\n\t./release.sh 1.5"
-    echo -e "\nCurrent version is '$OLD_VERSION'.\n"
+    echo -e "Example:\n\t./release.sh 1.0\n"
+    echo -e "Previous version is '$OLD_VERSION'.\n"
     exit 1
 fi
 
