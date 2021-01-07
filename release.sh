@@ -61,4 +61,4 @@ git tag -a v$NEW_VERSION -m "Releasing version v"$NEW_VERSION
 git push origin v$NEW_VERSION
 
 # Use goreleaser to cross-build for all platforms and make a release.
-goreleaser
+goreleaser --rm-dist
