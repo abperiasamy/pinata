@@ -140,7 +140,13 @@ func shell() {
 
 		case cmd == "resign":
 			gGame.Resign(humanColor())
-			isGameOver(gGame) // Game is over :p
+			isGameOver(gGame) // Game is over, but print the status.
+
+			// Save the game.
+			if savePGN(gGame, gGameFilename) == nil { // Success
+				fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
+			}
+
 			goto end
 
 		case strings.HasPrefix(cmd, "/fen"):
@@ -154,7 +160,7 @@ func shell() {
 					continue
 				}
 				gGame = chess.NewGame(fen)
-				if isGameOver(gGame) {
+				if isGameOver(gGame) { // No more moves to play.
 					goto end
 				}
 			} else { // Just display the current FEN
@@ -185,7 +191,7 @@ func shell() {
 			g := loadPGN(filename)
 			if g != nil { // Success
 				gGame = g              // Overwrite the current game.
-				if isGameOver(gGame) { // Check to see the game already ended.
+				if isGameOver(gGame) { // No more moves to play.
 					goto end
 				}
 			}
@@ -245,12 +251,23 @@ func shell() {
 
 		case cmd == "/quit": // Same as "resign" command.
 			gGame.Resign(humanColor())
-			isGameOver(gGame) // Game is over :p
+			isGameOver(gGame) // Game is over, but print the status
+
+			// Save the game.
+			if savePGN(gGame, gGameFilename) == nil { // Success
+				fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
+			}
+
 			goto end
 
 		default:
 			engineCounterMove(eng, gGame, cmd)
 			if isGameOver(gGame) {
+				// Save the game.
+				if savePGN(gGame, gGameFilename) == nil { // Success
+					fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
+				}
+
 				goto end
 			}
 		}
