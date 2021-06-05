@@ -1,4 +1,5 @@
 pinata
+*.pgn
 *~
 .goreleaser
 /dist
