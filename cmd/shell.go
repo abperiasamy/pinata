@@ -250,9 +250,6 @@ func shell() {
 			}
 
 		case cmd == "/quit": // Same as "resign" command.
-			gGame.Resign(humanColor())
-			isGameOver(gGame) // Game is over, but print the status
-
 			// Save the game.
 			if savePGN(gGame, gGameFilename) == nil { // Success
 				fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
