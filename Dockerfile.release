@@ -3,9 +3,9 @@ FROM ubuntu:latest
 MAINTAINER Anand Babu Periasamy (@abperiasamy)
 
 RUN apt-get update && apt-get install -y stockfish curl && \
-    curl -LJO https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_linux_x64.tar.gz && \
-    tar xf pinata_1.8_linux_x64.tar.gz pinata && \
+    curl -LJO https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_linux_x64.tar.gz && \
+    tar xf pinata_1.9_linux_x64.tar.gz pinata && \
     mv pinata /usr/bin && \
-    rm -f pinata_1.8_linux_x64.tar.gz
+    rm -f pinata_1.9_linux_x64.tar.gz
 
 ENTRYPOINT ["pinata", "-e", "/usr/games/stockfish"]

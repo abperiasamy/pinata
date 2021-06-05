@@ -1,4 +1,4 @@
-# Piñata (v1.8)
+# Piñata (v1.9)
 Piñata is an interactive shell to play blindfold chess against computers. Install any UCI compatible chess engine like [Stockfish](https://stockfishchess.org/download/) in the standard executable search path and Piñata will pick it up.
 
 ## Docker Container
@@ -10,12 +10,12 @@ sudo docker run -it abperiasamy/pinata:latest
 ## Download
 | OS         | Arch           | Link                                                                                                   |
 | ---------- | --------       | ------                                                                                                 |
-| GNU/Linux  | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_linux_x64.tar.gz)   |
-| GNU/Linux  | Arm (64-bit)   | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_linux_a64.tar.gz)   |
-| GNU/Linux  | Arm (32-bit)   | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_linux_a32v7.tar.gz) |
-| Windows    | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_windows_x64.zip)    |
-| Darwin     | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_darwin_x64.tar.gz)  |
-| FreeBSD    | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.8/pinata_1.8_freebsd_x64.tar.gz) |
+| GNU/Linux  | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_linux_x64.tar.gz)   |
+| GNU/Linux  | Arm (64-bit)   | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_linux_a64.tar.gz)   |
+| GNU/Linux  | Arm (32-bit)   | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_linux_a32v7.tar.gz) |
+| Windows    | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_windows_x64.zip)    |
+| Darwin     | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_darwin_x64.tar.gz)  |
+| FreeBSD    | Intel (64-bit) | [Download](https://github.com/abperiasamy/pinata/releases/download/v1.9/pinata_1.9_freebsd_x64.tar.gz) |
 
 ## Usage
 ```
