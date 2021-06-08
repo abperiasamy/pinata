@@ -72,8 +72,8 @@ func engineMoveFirst(engine *uci.Engine, game *chess.Game) error {
 	return nil
 }
 
-// Engine's turn
-func engineCounterMove(engine *uci.Engine, game *chess.Game, moveStr string) error {
+// Send human move to engine and get a counter move in response
+func engineMoveNext(engine *uci.Engine, game *chess.Game, moveStr string) error {
 	err := game.MoveStr(moveStr)
 	if err != nil {
 		fmt.Println("Allowed moves:", gConsole.Bold(gConsole.Yellow(validMoves(game))))

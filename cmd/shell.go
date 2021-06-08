@@ -121,11 +121,15 @@ func shell() {
 	}
 	defer l.Close()
 
+	gameStarted := false
+
 	if humanColor() == chess.Black {
 		err = engineMoveFirst(eng, gGame)
 		if err != nil {
 			fmt.Errorf("Engine Failure: ", err)
+			os.Exit(1)
 		}
+		gameStarted = true
 	}
 
 	for {
@@ -249,22 +253,24 @@ func shell() {
 				fmt.Println(gConsole.Bold(gConsole.Yellow("emacs")), "key bindings active")
 			}
 
-		case cmd == "/quit": // Same as "resign" command.
+		case cmd == "/quit":
+
 			// Save the game.
-			if savePGN(gGame, gGameFilename) == nil { // Success
+			if gameStarted && savePGN(gGame, gGameFilename) == nil { // Success
 				fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
 			}
 
 			goto end
 
 		default:
-			engineCounterMove(eng, gGame, cmd)
+			// Send the human move to engine and get a counter move
+			engineMoveNext(eng, gGame, cmd)
+			gameStarted = true
 			if isGameOver(gGame) {
 				// Save the game.
 				if savePGN(gGame, gGameFilename) == nil { // Success
 					fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
 				}
-
 				goto end
 			}
 		}
