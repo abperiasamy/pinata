@@ -169,8 +169,8 @@ func validMovesConstructor() func(string) []string {
 
 // Readline completion of all the valid moves left.
 func validMoves(game *chess.Game) (moves string) {
-	for _, move := range gGame.Position().ValidMoves() {
-		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, gGame.Position(), move)
+	for _, move := range game.Position().ValidMoves() {
+		moves += " " + chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move)
 	}
 	return moves
 }

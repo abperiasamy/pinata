@@ -47,27 +47,27 @@ func newEngine(enginePath string) (*uci.Engine, error) {
 	return eng, err
 }
 
-// Human's turn
-func engineMove(engine *uci.Engine, game *chess.Game) error {
+// Engine's first move as white
+func engineMoveFirst(engine *uci.Engine, game *chess.Game) error {
 	results, err := engine.GoDepth(gEngineDepth, uci.HighestDepthOnly)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	moveSAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
+	moveLAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	err = game.Move(moveSAN)
+	err = game.Move(moveLAN)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
+	fmt.Println(enginePrompt() + chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), moveLAN))
 	drawBoard(game)
 	return nil
 }
@@ -86,15 +86,20 @@ func engineCounterMove(engine *uci.Engine, game *chess.Game, moveStr string) err
 		return err
 	}
 
-	moveSAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
+	moveLAN, err := chess.LongAlgebraicNotation{}.Decode(game.Position(), results.BestMove)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	fmt.Println(enginePrompt() + chess.AlgebraicNotation{}.Encode(game.Position(), moveSAN))
+	// Only the valid moves list has the equivalent SAN move with tag pairs.
+	for _, move := range game.Position().ValidMoves() {
+		if moveLAN.String() == chess.Encoder.Encode(chess.LongAlgebraicNotation{}, game.Position(), move) {
+			fmt.Println(enginePrompt() + chess.Encoder.Encode(chess.AlgebraicNotation{}, game.Position(), move))
+		}
+	}
 
-	err = game.Move(moveSAN)
+	err = game.Move(moveLAN)
 	if err != nil {
 		fmt.Println(err)
 		return err

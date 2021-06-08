@@ -10,9 +10,9 @@ require (
 	github.com/freeeve/uci v0.0.0-20200629112257-2a3e349f2e55
 	github.com/kr/text v0.2.0 // indirect
 	github.com/logrusorgru/aurora v2.0.3+incompatible
-	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/olekukonko/tablewriter v0.0.4 // indirect
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/spf13/cobra v1.1.1
 	golang.org/x/sys v0.0.0-20201118182958-a01c418693c7 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect

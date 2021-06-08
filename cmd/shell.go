@@ -122,7 +122,7 @@ func shell() {
 	defer l.Close()
 
 	if humanColor() == chess.Black {
-		err = engineMove(eng, gGame)
+		err = engineMoveFirst(eng, gGame)
 		if err != nil {
 			fmt.Errorf("Engine Failure: ", err)
 		}
