@@ -81,6 +81,7 @@ func init() {
 	// rootCmd.PersistentFlags().StringVarP(&gCfgFile, "config", "c", "pinata.toml", "config file")
 	rootCmd.PersistentFlags().StringVarP(&gEngineBinary, "engine", "e", "stockfish", "path to UCI compatible chess engine executable")
 	rootCmd.PersistentFlags().StringVarP(&gGamePath, "file", "f", "", "load game from a PGN file")
+	rootCmd.PersistentFlags().StringVarP(&gLichessAuthTok, "analyze", "a", "", "lichess.org API access-token to analyze the game")
 	rootCmd.PersistentFlags().BoolVarP(&gHumanIsBlack, "black", "b", false, "choose the black side")
 	rootCmd.PersistentFlags().BoolVarP(&gVisual, "visual", "v", false, "cheat blindfold")
 	if runtime.GOOS == "windows" { // disable color and unicode support on Windows by default

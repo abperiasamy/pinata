@@ -270,6 +270,17 @@ func shell() {
 				// Save the game.
 				if savePGN(gGame, gGameFilename) == nil { // Success
 					fmt.Println("Game saved to", gConsole.Bold(gConsole.Red(gGameFilename)))
+
+					// If analysis is request, upload the game to lichess.org and open it in a browser.
+					if gLichessAuthTok != "" {
+						lic := NewLichessClient(gLichessAuthTok, "Piñata "+gVersion)
+						_, url, err := lic.Import(gGameFilename)
+						if err != nil {
+							fmt.Println("Unable to export the game to https://lichess.org,", err)
+							goto end
+						}
+						openbrowser(url)
+					}
 				}
 				goto end
 			}

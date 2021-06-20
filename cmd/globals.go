@@ -29,16 +29,17 @@ const (
 
 // Global defaults. Avoid global variables as much as possible.
 var (
-	gCfgFile      string
-	gGamePath     string
-	gEngineBinary string
-	gEngineDepth  int
-	gHumanIsBlack bool
-	gVisual       bool
-	gNoColor      bool
-	gLightBg      bool
-	gConsole      aurora.Aurora
-	gMoveCount    int = 1 // Increment on every black's move.
+	gCfgFile        string
+	gGamePath       string
+	gEngineBinary   string
+	gLichessAuthTok string
+	gEngineDepth    int
+	gHumanIsBlack   bool
+	gVisual         bool
+	gNoColor        bool
+	gLightBg        bool
+	gConsole        aurora.Aurora
+	gMoveCount      int = 1 // Increment on every black's move.
 
 	gGame *chess.Game
 )
