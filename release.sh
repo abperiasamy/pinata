@@ -17,7 +17,7 @@ then
 fi
 
 ## Determine the last release tag.
-OLD_VERSION=`git tag | tail -1 | cut -d'v' -f2`
+OLD_VERSION=`git tag | sort --version-sort | tail -1 | cut -d'v' -f2`
 if test "$?" != "0"
 then
     echo "Error: No previous release tag found."
@@ -29,7 +29,7 @@ if [ -z $NEW_VERSION ]
 then
     echo -e "Usage:\n\trelease.sh VERSION"
     echo -e "Example:\n\t./release.sh 1.0\n"
-    echo -e "Previous version is '$OLD_VERSION'.\n"
+    echo -e "Previous version is '$OLD_VERSION'."
     exit 1
 fi
 
