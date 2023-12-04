@@ -1,41 +1,39 @@
 # github.com/abperiasamy/chess v1.1.1-0.20200806085408-19da0d67c424
 ## explicit
 github.com/abperiasamy/chess
-# github.com/chzyer/logex v1.1.10
-## explicit
-# github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
-## explicit
+# github.com/chzyer/readline v1.5.1
+## explicit; go 1.15
 github.com/chzyer/readline
-# github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1
-## explicit
-# github.com/freeeve/uci v0.0.0-20200629112257-2a3e349f2e55
-## explicit
+# github.com/freeeve/uci v1.0.0
+## explicit; go 1.13
 github.com/freeeve/uci
-# github.com/inconshreveable/mousetrap v1.0.0
+# github.com/inconshreveable/mousetrap v1.1.0
+## explicit; go 1.18
 github.com/inconshreveable/mousetrap
-# github.com/kr/text v0.2.0
-## explicit
+# github.com/kr/pretty v0.3.1
+## explicit; go 1.12
 # github.com/logrusorgru/aurora v2.0.3+incompatible
 ## explicit
 github.com/logrusorgru/aurora
-# github.com/mattn/go-runewidth v0.0.13
-## explicit
+# github.com/mattn/go-runewidth v0.0.15
+## explicit; go 1.9
 github.com/mattn/go-runewidth
-# github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e
-## explicit
 # github.com/olekukonko/tablewriter v0.0.5
-## explicit
+## explicit; go 1.12
 github.com/olekukonko/tablewriter
-# github.com/rivo/uniseg v0.2.0
+# github.com/rivo/uniseg v0.4.4
+## explicit; go 1.18
 github.com/rivo/uniseg
-# github.com/spf13/cobra v1.1.1
-## explicit
+# github.com/rogpeppe/go-internal v1.11.0
+## explicit; go 1.19
+# github.com/spf13/cobra v1.8.0
+## explicit; go 1.15
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
+## explicit; go 1.12
 github.com/spf13/pflag
-# golang.org/x/sys v0.0.0-20201118182958-a01c418693c7
-## explicit
-golang.org/x/sys/internal/unsafeheader
+# golang.org/x/sys v0.15.0
+## explicit; go 1.18
 golang.org/x/sys/unix
-# gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
-## explicit
+# gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
+## explicit; go 1.11
